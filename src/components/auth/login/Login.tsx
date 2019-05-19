@@ -11,7 +11,6 @@ import {
 import { ComponentType } from "../../App";
 import { Link } from "react-router-dom";
 import styles from "./Login.module.scss";
-import { string, any } from "prop-types";
 import firebase from 'firebase';
 
 type FormEvent = React.FormEvent<HTMLFormElement>;

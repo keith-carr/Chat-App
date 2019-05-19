@@ -124,7 +124,7 @@ export class Register extends ComponentType {
       !form.password.length ||
       !form.passwordConfirmation.length
     );
-  };
+  }; 
 
   isPasswordValid = (form: IForm) => {
     let { password, passwordConfirmation } = form;
@@ -157,10 +157,11 @@ export class Register extends ComponentType {
             <Icon name="puzzle piece" color="orange" />
             Register For DevChat
           </Header>
-          <Form size="large" onSubmit={this.handleSubmit}>
+          <Form data-test="form-component" size="large" onSubmit={this.handleSubmit}>
             <Segment stacked>
               <Form.Input
                 fluid
+                data-test="username-input"
                 name="username"
                 icon="user"
                 iconPosition="left"

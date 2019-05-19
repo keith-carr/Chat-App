@@ -24,17 +24,22 @@ test ('renders the form', () => {
 });
 
 describe('when submit button clicked', () => {
-    let wrapper:IWrapper
-
+    let wrapper:any
+    let usernameMock:any;
     beforeEach(() => {
+        usernameMock = jest.fn();
         const props = {
-            username: jest.fn(),
+            username: usernameMock,
             email: 'test@gmail.com',
             password: 'testpassword',
             passwordConfirmation: 'testpassword'
         }
         wrapper = shallow(<Register {...props} />);
+        
         const btnComponent = findByTestAttr(wrapper, 'component-submit-btn');
         btnComponent.simulate('click');
+    });
+    // test('how many times username is submitted ', () => {
+    //     const usernameCallCount = usernameMock.mock.calls.length;
+    //     expect(usernameCallCount).toBe(1);
     })
-})
