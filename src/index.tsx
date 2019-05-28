@@ -5,13 +5,16 @@ import * as serviceWorker from "./serviceWorker";
 import App, { ComponentType } from "./components/App";
 import Login from "./components/auth/login/Login";
 import Register from "./components/auth/register/Register";
+import Spinner from "./components/ui/spinner/Spinner";
 
 import "semantic-ui-react";
+
 import { Provider, connect } from "react-redux";
 import thunk from "redux-thunk";
 import { applyMiddleware, compose, createStore } from "redux";
 
 import rootReducer from "./store/reducers";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,7 +22,8 @@ import {
   withRouter
 } from "react-router-dom";
 
-import {setUser} from './store/actions/setUser';
+//importing action setupUser
+import { setUser, clearUser } from "./store/actions/setUser";
 
 import firebase from "./firebase";
 
@@ -35,16 +39,21 @@ const store = createStore(
 );
 
 class Root extends ComponentType {
+  // Root will be in the connect()()
   componentDidMount() {
+    console.log(this.props.isLoading);
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.props.setUser(user);
         this.props.history.push("/");
+      } else {
+        this.props.history.push('/login');
+        this.props.clearUser();
       }
     });
   }
   render() {
-    return (
+    return this.props.isLoading ? <Spinner /> : (
       <Switch>
         <Route exact path="/" component={App} />
         <Route path="/login" component={Login} />
@@ -53,7 +62,16 @@ class Root extends ComponentType {
     );
   }
 }
-const RootWithAuth = withRouter(connect(null,{setUser})(Root));
+const mapStateToProps = (state:{user:{isLoading:boolean}}) => ({
+  isLoading: state.user.isLoading
+});
+
+const RootWithAuth = withRouter(
+  connect(
+    mapStateToProps,
+    { setUser, clearUser }
+  )(Root)
+);
 
 if (document.getElementById("root")) {
   ReactDOM.render(

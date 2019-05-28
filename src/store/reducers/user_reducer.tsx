@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 import {ISetUser} from '../actions/setUser';
 
 const initialUserState = {
-    currentUser:'',
+    currentUser:'user',
     isLoading:true
 }
 
@@ -12,6 +12,11 @@ const user_reducer = (state = initialUserState, action:ISetUser) => {
             return {
                 currentUser: action.payload.currentUser,
                 isLoading: false,
+            }
+        case actionTypes.CLEAR_USER:
+            return {
+                ...initialUserState,
+                isLoading: false
             }
         default: return state;
     }

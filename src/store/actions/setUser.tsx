@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes';
-import { ActionCreator } from 'react-redux';
 
 export interface ISetUser {
     type: string,
@@ -14,5 +13,11 @@ export const setUser = (user:object) => {
         payload: {
             currentUser: user
         }
+    }
+}
+
+export const clearUser = () => {
+    return {
+        type: actionTypes.CLEAR_USER
     }
 }

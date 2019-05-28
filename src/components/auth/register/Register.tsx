@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEventHandler } from "react";
 import {
   Grid,
   Form,
@@ -22,13 +22,14 @@ interface IErrorMessage {
 }
 
 interface IForm {
-  username: string;
-  email: string;
-  password: string;
-  passwordConfirmation: string;
-  errors: Array<IErrorMessage>; // IErrorMessage is casted, not required when casted
-  loading: boolean,
-  usersRef: any
+  username:string;
+  email:string;
+  password:string;
+  passwordConfirmation:string;
+  errors:Array<IErrorMessage>; // IErrorMessage is casted, not required when casted
+  loading:boolean,
+  usersRef:any,
+  // value:string
 }
 
 export class Register extends ComponentType {
@@ -40,7 +41,8 @@ export class Register extends ComponentType {
     passwordConfirmation: "",
     errors: [],
     loading: false,
-    usersRef: firebase.database().ref('users')
+    usersRef: firebase.database().ref('users'),
+    // value: ''
   };
   displayErrors = (errors: Array<IErrorMessage>) =>
     errors.map((error: IErrorMessage, i) => <p key={i}>{error.message}</p>);
@@ -50,7 +52,7 @@ export class Register extends ComponentType {
   handleChange = (event: InputEvent) => {
     this.setState({ [event.currentTarget.name]: event.currentTarget.value });
   };
-  handleSubmit = (event: FormEvent) => {
+  handleSubmit:FormEventHandler = (event) => {
     event.preventDefault();
     if (this.isFormValid()) {
       this.setState({ errors: [], loading: true });
