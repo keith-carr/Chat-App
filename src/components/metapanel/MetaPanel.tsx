@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import ComponentType from '../../ComponentType';
 
 class MetaPanel extends ComponentType {

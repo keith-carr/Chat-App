@@ -84,7 +84,7 @@ class Login extends ComponentType {
             <Icon name="code branch" color="violet" />
             Login For DevChat
           </Header>
-          <Form>
+          <Form onSubmit={this.handleSubmit}>
             <Segment stacked>
               <Form.Input
                 fluid
@@ -123,7 +123,7 @@ class Login extends ComponentType {
 
             <Message>
               Don't have an account?
-              <Link to="/login">Register</Link>
+              <Link to="/register">Register</Link>
             </Message>
           </Form>
           {errors.length > 0 && (

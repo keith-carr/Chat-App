@@ -1,5 +1,4 @@
 import React from 'react';
-import ComponentType from '../App';
 
 class ColorPanel extends React.Component {
     render() {

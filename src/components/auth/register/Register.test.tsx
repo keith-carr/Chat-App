@@ -46,7 +46,6 @@ describe("Input Component ", () => {
   
   const fakeEvent = { preventDefault: () => null }; // intercept event function call in handleSubmit
 
-
   beforeEach(() => {
     wrapper = inputSetup(Register, initialState);
     componentInput = findByTestAttr(wrapper, "form-component");

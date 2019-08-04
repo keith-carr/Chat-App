@@ -4,16 +4,25 @@ import ColorPanel from './colorpanel/ColorPanel';
 import SidePanel from './sidepanel/SidePanel';
 import MetaPanel from './metapanel/MetaPanel'; 
 import Messages from './messages/Messages';
+import {connect} from 'react-redux';
 
 export class ComponentType<P = any, S = any> extends Component<P, S> {    
 
 }
+interface Props {
+  currentUser:{displayName:string}
+}
 
-const App: React.FC = () => {
+export interface Store extends React.Props<any> {
+  store?: any;
+}
+
+
+const App: React.FC = ({currentUser}:any) => {
   return (
     <Grid columns="equal" className="app" style={{background: '#eee'}}>
       <ColorPanel />
-      <SidePanel />
+      <SidePanel currentUser={currentUser} />
 
       <Grid.Column style={{marginLeft: 320}}>
         <Messages />
@@ -25,5 +34,8 @@ const App: React.FC = () => {
     </Grid>
     );
 }
+const mapStateToProps = (state:any):any => ({
+  currentUser: state.user.currentUser
+}); 
 
-export default App;
+export default connect(mapStateToProps)(App);
