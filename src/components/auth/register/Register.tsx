@@ -11,7 +11,7 @@ import {
 import { ComponentType } from "../../App";
 import { Link } from "react-router-dom";
 import styles from "./Register.module.scss";
-import firebase from "../../../firebase";
+import firebase from "../../../firebase"; 
 import md5 from "md5";
 
 type FormEvent = React.FormEvent<HTMLFormElement>;

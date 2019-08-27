@@ -6,7 +6,7 @@ export interface IChannel {
     payload:{currentChannel:{channel:object}}
 }
 
-export const setCurrentChannel = (channel:IChannel) => {
+export const setCurrentChannel = (channel:any) => {
     return {
         type:actionTypes.SET_CURRENT_CHANNEL,
         payload:{

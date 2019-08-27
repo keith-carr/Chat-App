@@ -22,7 +22,8 @@ export const storeFactory = (initialState?:any) => {
  * @returns {ShallowWrapper}
  */
 export interface IWrapper {
-    find(target:string):any
+    find(target:string):any,
+    instance():any
 }
 
 

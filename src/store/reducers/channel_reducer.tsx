@@ -14,4 +14,4 @@ const channel_reducer = (state = initialChannelState, action:IChannel) => {
         default: return state;
     }
 }
-export default channel_reducer;
+export default channel_reducer; 

@@ -3,6 +3,7 @@ import ComponentType from '../../ComponentType';
 import { Menu } from 'semantic-ui-react';
 import UserPanel from './userpanel/UserPanel';
 import Channels from './channels/Channels';
+import styles from "./SidePanel.module.scss";
 
 
 class SidePanel extends ComponentType {

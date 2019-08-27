@@ -11,7 +11,18 @@ import {Store} from '../../App';
 type InputEvent = React.FormEvent<HTMLInputElement>;
 type FormEvent = React.FormEvent<HTMLFormElement>;
 type User = {displayName:string, photoURL:string};
-type Channel = {id:number, name:string};
+
+export interface Channel {id:number, name:string};
+
+export interface INewChannel {
+    id:string,
+    name:string,
+    details:string,
+    createdBy: {
+        name:string,
+        avatar:string
+    }
+}
 
 interface IState {
         user:User,
