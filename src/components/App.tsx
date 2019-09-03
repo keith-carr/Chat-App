@@ -18,14 +18,20 @@ export interface Store extends React.Props<any> {
 }
 
 
-const App: React.FC = ({currentUser}:any) => {
+const App: React.FC = ({currentUser, currentChannel}:any) => {
   return (
     <Grid columns="equal" className="app" style={{background: '#eee'}}>
       <ColorPanel />
-      <SidePanel currentUser={currentUser} />
+      <SidePanel
+        key={currentUser && currentUser.uid}
+        currentUser={currentUser} />
 
       <Grid.Column style={{marginLeft: 320}}>
-        <Messages />
+        <Messages
+          key={currentChannel && currentChannel.id}
+          currentChannel={currentChannel}
+          currentUser={currentUser}
+        />
       </Grid.Column>
 
       <Grid.Column width={4}>
@@ -35,7 +41,8 @@ const App: React.FC = ({currentUser}:any) => {
     );
 }
 const mapStateToProps = (state:any):any => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  currentChannel: state.channel.currentChannel
 }); 
 
 export default connect(mapStateToProps)(App);
