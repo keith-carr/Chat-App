@@ -20,7 +20,7 @@ class Messages extends ComponentType {
             <MessagesHeader />
             
             <Segment>
-                <Comment.Group className={styles}>
+                <Comment.Group className={styles.message}>
                     {/* Messages */}
                 </Comment.Group>
             </Segment>

@@ -15,7 +15,7 @@ class SidePanel extends ComponentType {
     }
     render() {
         const { currentUser } = this.props;
-        console.log('CUrrent User In Side PANEL: ', this.props.currentUser);
+        console.log('Current User In Side PANEL: ', this.props.currentUser);
         return (
             <Menu
                 size="large"

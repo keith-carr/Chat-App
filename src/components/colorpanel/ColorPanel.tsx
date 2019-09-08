@@ -6,7 +6,7 @@ class ColorPanel extends React.Component {
         return (
             <Sidebar
               as={Menu}
-              icon='label'
+              // icon='label'
               inverted
               vertical
               visible

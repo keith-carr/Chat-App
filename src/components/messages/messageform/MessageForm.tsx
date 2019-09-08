@@ -3,7 +3,7 @@ import firebase from '../../../firebase';
 import {Segment, Button, Input} from 'semantic-ui-react';
 import ComponentType from '../../../ComponentType';
 import styles from './MessageForm.module.scss';
-import { any } from 'prop-types';
+
 
 /**
  * FormEvent for Submiting the form
@@ -12,6 +12,13 @@ import { any } from 'prop-types';
 type FormEvent = React.FormEvent<HTMLFormElement>;
 type InputEvent = React.FormEvent<HTMLInputElement>;
 
+// interface IState {
+//     message:string,
+//     channel:object,
+//     user:object,
+//     loading:boolean,
+//     errors:[ConcatArray<ErrorConstructor>, {message:}]
+// }
 
 class MessageForm extends ComponentType {
     state = {
@@ -19,7 +26,7 @@ class MessageForm extends ComponentType {
         channel: this.props.currentChannel,
         user: this.props.currentUser,
         loading: false,
-        errors: [] 
+        errors: [{message: ''}]
     }
 
     handleChange = (event:InputEvent) => {
@@ -61,18 +68,26 @@ class MessageForm extends ComponentType {
                 .then(() => {
                     this.setState({loading:false, message: '', errors:[] })
                 })
-                .catch( (err:[]) => {
+                .catch( (err:ConcatArray<{message:string}>) => {
                     console.error(err);
                     this.setState({
                         loading: false,
                         errors: this.state.errors.concat(err)
                     })
                 })
+        }        
+        else {
+            this.setState({
+                errors: this.state.errors.concat({ message: 'Add a message' })
+            })
         }
     }
 
 
     render() {
+
+        const {errors} = this.state;
+
         return (
 
             <Segment
@@ -85,6 +100,11 @@ class MessageForm extends ComponentType {
                     label={<Button icon={'add'} />}
                     labelPosition='left'
                     placeholder='Write your message'
+                    className={
+                        errors.some(error => error.message.includes('message')) 
+                        ? 'error' 
+                        : ''
+                    }
                     />
 
             <Button.Group icon widths='1'>
