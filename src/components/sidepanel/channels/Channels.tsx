@@ -55,10 +55,11 @@ export class Channels extends React.Component<IProps> {
     }
     componentDidMount() {
         this.addListenters();
+        console.log("CHANNELS -> State.CHANNELS:", this.state.channels);
     }
 
     addListenters() {
-        let loadedChannels:[object] = [{}];  
+        let loadedChannels:Array<object> = [];  
         this.state.channelsRef.on('child_added', (snap:{val:()=>object}) =>{
             loadedChannels.push( snap.val() );
             this.setState({channels: loadedChannels}, () => this.setFirstChannel());

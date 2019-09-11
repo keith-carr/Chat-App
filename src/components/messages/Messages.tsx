@@ -7,13 +7,23 @@ import ComponentType from '../../ComponentType';
 import styles from './Messages.module.scss';
 import firebase from '../../firebase';
 
+
+
 class Messages extends ComponentType {
+
     state = {
         messagesRef: firebase.database().ref('messages'),
-        channel: this.props.currentChannel
+        channel: this.props.currentChannel,
+        user: this.props.currentUser
     }
+
+    componentDidMount() {
+        console.log("FROM Messages, CHANNEL: ", this.state.channel );
+        // console.log("FROM Messages, USER: ", this.state.user );
+    }
+
     render() {
-        const {messagesRef, channel} = this.state; 
+        const {messagesRef, channel, user} = this.state; 
 
         return (
             <>
@@ -28,6 +38,7 @@ class Messages extends ComponentType {
             <MessageForm
                 messagesRef={messagesRef}
                 currentChannel={channel}
+                currentUser={user}
             />
             </>
         )

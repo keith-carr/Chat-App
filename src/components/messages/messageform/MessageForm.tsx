@@ -29,6 +29,13 @@ class MessageForm extends ComponentType {
         errors: [{message: ''}]
     }
 
+    componentDidMount() {
+        console.log("MessageRef Object: ", this.props.messagesRef);
+        console.log("MessageForm -> Current Channel:", this.state.channel);
+        console.log("MessageForm -> User Id:", this.state.user.uid);
+
+    }
+
     handleChange = (event:InputEvent) => {
         this.setState({[event.currentTarget.name]: event.currentTarget.value});
     }
@@ -42,7 +49,7 @@ class MessageForm extends ComponentType {
             timestamp: firebase.database.ServerValue.TIMESTAMP,
             user: {
                 id: this.state.user.uid,
-                name: this.state.user.display,
+                name: this.state.user.displayName,
                 avatar: this.state.user.photoURL
             },
             content: this.state.message
@@ -60,10 +67,11 @@ class MessageForm extends ComponentType {
         const { message, channel } = this.state;
 
         if(message) {
-            this.setState({loading: true})
+            this.setState({loading: true});
+            console.log('SendMessage() -> Message Ref: ', messagesRef);
             messagesRef
                 .child(channel.id)
-                .push() //Push on to messageRef
+                .push()
                 .set(this.createMessage())
                 .then(() => {
                     this.setState({loading:false, message: '', errors:[] })
@@ -86,7 +94,7 @@ class MessageForm extends ComponentType {
 
     render() {
 
-        const {errors} = this.state;
+        const {errors, message, loading} = this.state;
 
         return (
 
@@ -96,6 +104,8 @@ class MessageForm extends ComponentType {
                 <Input 
                     fluid
                     name='message'
+                    onChange={this.handleChange}
+                    value={message}
                     style={{marginBottom: '0.7em'}}
                     label={<Button icon={'add'} />}
                     labelPosition='left'
@@ -110,6 +120,7 @@ class MessageForm extends ComponentType {
             <Button.Group icon widths='1'>
                 <Button
                     onClick={this.sendMessage}
+                    disabled={loading}
                     color='orange'
                     content='Add Replay'
                     labelPosition='left'
