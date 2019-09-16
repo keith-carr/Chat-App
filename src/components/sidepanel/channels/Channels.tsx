@@ -3,10 +3,9 @@ import { Menu, Icon, Modal, Input, Button } from 'semantic-ui-react';
 import { Form } from 'semantic-ui-react';
 import firebase from '../../../firebase';
 
-import * as actions from '../../../store/actions';
-
+import {setCurrentChannel} from '../../../store/actions';
 import {connect} from 'react-redux';
-import {Store} from '../../App';
+
 
 type InputEvent = React.FormEvent<HTMLInputElement>;
 type FormEvent = React.FormEvent<HTMLFormElement>;
@@ -26,7 +25,7 @@ export interface INewChannel {
 
 interface IState {
         user:User,
-        channels:[Channel],
+        channels:any,
         channelName:string,
         channelDetails:string,
         isModalOpen:boolean,
@@ -38,14 +37,14 @@ interface IState {
 interface IProps {
     currentUser:User,
     changeChannel?:(channel:object) => void,
-    onSetCurrentChannel?:any,
+    setCurrentChannel?:any,
     setActiveChannel?:() => void
 }
 
-export class Channels extends React.Component<IProps> {
+class Channels extends React.Component<IProps> {
     state:IState = {
         user: this.props.currentUser,
-        channels: [{id:0, name:''}], // ?????????? ---- COULD CAUSE PROBLEMS IN CHANNEL SWITCHING //
+        channels: [], // ?????????? ---- COULD CAUSE PROBLEMS IN CHANNEL SWITCHING //
         channelName: '',
         channelDetails: '',
         channelsRef: firebase.database().ref('channels'),
@@ -53,9 +52,13 @@ export class Channels extends React.Component<IProps> {
         firstLoad: true,
         activeChannel: '',
     }
-    componentDidMount() {
+    componentWillMount() {
         this.addListenters();
-        console.log("CHANNELS -> State.CHANNELS:", this.state.channels);
+        console.log("CHANNELS -> State channels: ", this.state.channels);
+    }
+
+    componentWillUnmount() {
+        this.removeListeners();
     }
 
     addListenters() {
@@ -69,18 +72,18 @@ export class Channels extends React.Component<IProps> {
     removeListeners = ():void => {
         this.state.channelsRef.off();
     }
-
+///////////////////////////
     setFirstChannel = () => {
         const firstChannel = this.state.channels[0];
         if(this.state.firstLoad && this.state.channels.length > 0) {
-            this.props.onSetCurrentChannel(firstChannel);
+            this.props.setCurrentChannel(firstChannel);
             this.setActiveChannel(firstChannel) ;
         }
         this.setState({firstLoad: false});
     }
-
+//////////////////////////////
     changeChannel = (channel:Channel) => {
-        this.props.onSetCurrentChannel(channel);
+        this.props.setCurrentChannel(channel);
         this.setActiveChannel(channel);
     }
 
@@ -150,61 +153,66 @@ export class Channels extends React.Component<IProps> {
 
         let {channels, isModalOpen} = this.state;
         return (
-            <>
-            <Menu.Menu style={{paddingBottom: '2em'}}>
-                <Menu.Item>
-                    <span>
-                        <Icon name="exchange" /> CHANNELS
-                    </span>{' '}
-                    ({channels.length}) <Icon name="add" onClick={this.openModal} /> 
-                </Menu.Item>
-                {this.displayChannels(channels)}
-            </Menu.Menu>
-            <Modal basic open={isModalOpen} onClose={this.closeModal}>
-                <Modal.Header>
-                    Add a Channel
-                </Modal.Header>
-                <Modal.Content>
-                    <Form onSubmit={this.handleSubmit}>
-                        <Form.Field>
-                            <Input
-                              fluid
-                              label="Name of Channel"
-                              name="channelName"
-                              onChange={this.handleChange}
-                            />
-                        </Form.Field>
-                    </Form>
-                </Modal.Content>
+            <React.Fragment>
+        <Menu.Menu style={{ paddingBottom: "2em" }}>
+          <Menu.Item>
+            <span>
+              <Icon name="exchange" /> CHANNELS
+            </span>{" "}
+            ({channels.length}) <Icon name="add" onClick={this.openModal} />
+          </Menu.Item>
+          {this.displayChannels(channels)}
+        </Menu.Menu>
 
-                <Modal.Actions>
-                    <Button data-test="add-btn" color="green" inverted onClick={this.addChannel}>
-                        <Icon name="checkmark" /> Add
-                    </Button>
-                    <Button color="red" inverted>
-                        <Icon name="remove" onClick={this.closeModal} /> Cancel
-                    </Button>
-                </Modal.Actions>
-            </Modal>
-            </>
+        {/* Add Channel Modal */}
+        <Modal basic open={isModalOpen} onClose={this.closeModal}>
+          <Modal.Header>Add a Channel</Modal.Header>
+          <Modal.Content>
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Field>
+                <Input
+                  fluid
+                  label="Name of Channel"
+                  name="channelName"
+                  onChange={this.handleChange}
+                />
+              </Form.Field>
+
+              <Form.Field>
+                <Input
+                  fluid
+                  label="About the Channel"
+                  name="channelDetails"
+                  onChange={this.handleChange}
+                />
+              </Form.Field>
+            </Form>
+          </Modal.Content>
+
+          <Modal.Actions>
+            <Button color="green" inverted onClick={this.handleSubmit}>
+              <Icon name="checkmark" /> Add
+            </Button>
+            <Button color="red" inverted onClick={this.closeModal}>
+              <Icon name="remove" /> Cancel
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      </React.Fragment>
         )
     }
 }
 
-// const mapStateToProps = () => {
 
-// }
-const mapDispatchToProps = (dispatch:any) => {
-    return {
-        onSetCurrentChannel: (channel:any) => dispatch(actions.setCurrentChannel(channel)),
-    };
-}
-
-// const mapDispatchToProps = dispatch => {
+export default connect<any, any>(
+    null,
+    { setCurrentChannel }
+  )(Channels);
+  
+// const mapDispatchToProps = (dispatch:any) => {
 //     return {
-//       onLoginSuccess: userId => dispatch(actions.loginSuccess(userId)),
-//       onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
+//         onSetCurrentChannel: (channel:any) => dispatch(actions.setCurrentChannel(channel)),
 //     };
-//   };
+// }
 
-export default connect<any, any, Store>(null, mapDispatchToProps)(Channels);
+// export default connect<any, any, Store>(null, mapDispatchToProps)(Channels);

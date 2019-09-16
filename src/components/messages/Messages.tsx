@@ -1,37 +1,82 @@
 import React from 'react';
 import { Segment, Comment } from 'semantic-ui-react';
-
+import MessageForm from './messageform/MessageForm'; 
 import MessagesHeader from './messagesheader/MessagesHeader';
-import MessageForm from './messageform/MessageForm';
-import ComponentType from '../../ComponentType';
+import ComponentType from '../../ComponentType'; 
+import Message from './message/Message';
 import styles from './Messages.module.scss';
-import firebase from '../../firebase';
+import firebase from '../../firebase'; 
+import { connect } from 'react-redux';
 
 
+interface IProps {
+    key:any,
+    currentChannel:object,
+    currentUser:object,
+}
 
-class Messages extends ComponentType {
-
-    state = {
+class Messages extends ComponentType<IProps> {
+    state:any = {
         messagesRef: firebase.database().ref('messages'),
+        messages: [],
+        messagesLoading: true,
         channel: this.props.currentChannel,
         user: this.props.currentUser
     }
 
     componentDidMount() {
-        console.log("FROM Messages, CHANNEL: ", this.state.channel );
-        // console.log("FROM Messages, USER: ", this.state.user );
+       const { channel, user } = this.state;
+    //    const channelId = this.state.channel.id;
+    //    console.log('Messages.tsx -> State channel.id: ', this.state.channel.id);
+       if(this.state.channel && this.state.user) {
+        // console.log('(2) Messages.tsx -> State channel.id: ', this.state.channel.id);
+            this.addListeners(channel.id);
+       }
     }
+    
+    addListeners = (channelId:any) => {
+        this.addMessageListener(channelId);
+        return channelId;
+    }
+    /**
+     * Pull data from messagesRef snap values in to loadedmessages
+     * Set loadedMessages into state messages[] and set loading to false
+     * @param {channelID:string} 
+     * @return {void}
+     */
+    addMessageListener = (channelId:any) => {
+        let loadedMessages:Array<any> = [];
+        this.state.messagesRef
+        .child(channelId).on("child_added", (snap:any) => {
+            loadedMessages.push(snap.val());
+            this.setState({
+                messages: loadedMessages,
+                messagesLoading: false
+            })
+
+        })
+    };
+
+    displayMessages = (messages:Array<any>) => (
+        messages.length > 0 && messages.map((message:{timestamp:number}) => (
+            <Message
+                key={message.timestamp}
+                message={message}
+                user={this.state.user}
+            />
+        ))
+    )
 
     render() {
-        const {messagesRef, channel, user} = this.state; 
-
+        const {messagesRef, messages, channel, user} = this.state; 
+ 
         return (
             <>
             <MessagesHeader />
             
-            <Segment>
+            <Segment> 
                 <Comment.Group className={styles.message}>
-                    {/* Messages */}
+                    {this.displayMessages(messages)}
                 </Comment.Group>
             </Segment>
 

@@ -29,12 +29,12 @@ class MessageForm extends ComponentType {
         errors: [{message: ''}]
     }
 
-    componentDidMount() {
-        console.log("MessageRef Object: ", this.props.messagesRef);
-        console.log("MessageForm -> Current Channel:", this.state.channel);
-        console.log("MessageForm -> User Id:", this.state.user.uid);
-
-    }
+    // componentDidMount() {
+    //     console.log("MessageRef Object: ", this.props.messagesRef);
+    //     console.log("MessageForm -> Current Channel:", this.state.channel);
+    //     console.log("MessageForm -> Current Channel ID:", this.state.channel.id);
+    //     console.log("MessageForm -> User Id:", this.state.user.uid);
+    // }
 
     handleChange = (event:InputEvent) => {
         this.setState({[event.currentTarget.name]: event.currentTarget.value});
@@ -42,9 +42,9 @@ class MessageForm extends ComponentType {
     /**
      * Creates a message object with timestamp, user, & content properties
      * @function createMessage
-     * @returns {message}
+     * @returns {message:object}
      */
-    createMessage = () => {
+    createMessage = ():object => {
         const message = {
             timestamp: firebase.database.ServerValue.TIMESTAMP,
             user: {

@@ -39,7 +39,7 @@ const App: React.FC = ({currentUser, currentChannel}:any) => {
       </Grid.Column>
     </Grid>
     );
-}
+};
 const mapStateToProps = (state:any):any => ({
   currentUser: state.user.currentUser,
   currentChannel: state.channel.currentChannel
