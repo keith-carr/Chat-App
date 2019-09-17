@@ -3,7 +3,7 @@ import firebase from '../../../firebase';
 import {Segment, Button, Input} from 'semantic-ui-react';
 import ComponentType from '../../../ComponentType';
 import styles from './MessageForm.module.scss';
-
+import FileModal from './filemodal/FileModal';
 
 /**
  * FormEvent for Submiting the form
@@ -26,15 +26,13 @@ class MessageForm extends ComponentType {
         channel: this.props.currentChannel,
         user: this.props.currentUser,
         loading: false,
-        errors: [{message: ''}]
+        errors: [{message: ''}],
+        modal: false,
     }
 
-    // componentDidMount() {
-    //     console.log("MessageRef Object: ", this.props.messagesRef);
-    //     console.log("MessageForm -> Current Channel:", this.state.channel);
-    //     console.log("MessageForm -> Current Channel ID:", this.state.channel.id);
-    //     console.log("MessageForm -> User Id:", this.state.user.uid);
-    // }
+    openModal = () => this.setState({modal: true});
+
+    closeModal = () => this.setState({modal: false});
 
     handleChange = (event:InputEvent) => {
         this.setState({[event.currentTarget.name]: event.currentTarget.value});
@@ -94,7 +92,7 @@ class MessageForm extends ComponentType {
 
     render() {
 
-        const {errors, message, loading} = this.state;
+        const {errors, message, modal, loading} = this.state;
 
         return (
 
@@ -128,10 +126,15 @@ class MessageForm extends ComponentType {
                 />
                 <Button
                     color='teal'
+                    onClick={this.openModal}
                     content='Upload Media'
                     labelPosition='right'
                     icon='cloud upload'
                     />
+                <FileModal
+                    modal={modal}
+                    closeModal={this.closeModal}
+                />
             </Button.Group>
             </Segment>
 
