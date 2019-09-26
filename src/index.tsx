@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 
-import App, { ComponentType } from "./components/App";
+import App from "./components/App";
+import ComponentType from './ComponentType';
 import Login from "./components/auth/login/Login";
 import Register from "./components/auth/register/Register";
 import Spinner from "./components/ui/spinner/Spinner";

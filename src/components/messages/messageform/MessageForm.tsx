@@ -89,6 +89,9 @@ class MessageForm extends ComponentType {
         }
     }
 
+    uploadFile = (file:any, metadata:any) => {
+        console.log(file, metadata);
+    }
 
     render() {
 
@@ -134,6 +137,7 @@ class MessageForm extends ComponentType {
                 <FileModal
                     modal={modal}
                     closeModal={this.closeModal}
+                    uploadFile={this.uploadFile}
                 />
             </Button.Group>
             </Segment>

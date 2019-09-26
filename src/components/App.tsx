@@ -6,9 +6,7 @@ import MetaPanel from './metapanel/MetaPanel';
 import Messages from './messages/Messages';
 import {connect} from 'react-redux';
 
-export class ComponentType<P = any, S = any> extends Component<P, S> {    
 
-}
 interface Props {
   currentUser:{displayName:string}
 }

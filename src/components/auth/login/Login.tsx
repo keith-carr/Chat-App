@@ -8,7 +8,7 @@ import {
   Message,
   Icon
 } from "semantic-ui-react";
-import { ComponentType } from "../../App";
+import ComponentType from "../../../ComponentType";
 import { Link } from "react-router-dom";
 import styles from "./Login.module.scss";
 import firebase from 'firebase';
