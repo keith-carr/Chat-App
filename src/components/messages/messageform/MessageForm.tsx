@@ -1,4 +1,5 @@
 import React from 'react';
+import uuidv4 from 'uuid/v4';
 import firebase from '../../../firebase';
 import {Segment, Button, Input} from 'semantic-ui-react';
 import ComponentType from '../../../ComponentType';
@@ -19,9 +20,40 @@ type InputEvent = React.FormEvent<HTMLInputElement>;
 //     loading:boolean,
 //     errors:[ConcatArray<ErrorConstructor>, {message:}]
 // }
+interface IState {
+        storageRef:any,
+        uploadTask: any,
+        uploadState: string,
+        percentUpload: number,
+        message: string,
+        channel: {id: number},
+        user: {
+               uid: any,
+               displayName: string,
+               photoURL: string
+            },
+        loading: boolean,
+        errors: [{message: string}],
+        modal: boolean,
+}
 
-class MessageForm extends ComponentType {
-    state = {
+interface IProps {
+    currentChannel: {id: number},
+    currentUser: {  
+                    uid: any,
+                    displayName: string,
+                    photoURL: string
+                },
+    messagesRef: any,
+    storageRef: any,
+}
+
+class MessageForm extends ComponentType<IProps> {
+    state:IState = {
+        storageRef: firebase.storage().ref(),
+        uploadTask: null,
+        uploadState: '',
+        percentUpload: 0,
         message: '',
         channel: this.props.currentChannel,
         user: this.props.currentUser,
@@ -55,7 +87,7 @@ class MessageForm extends ComponentType {
         return message;
     }
     /**
-     * If there's a message then set the firebase messageRef properties and state.loading to true
+     * If there's a message then set the firebase messagesRef properties and state.loading to true
      * @function sendMessage
      * @param {undefined}
      * @returns {void}
@@ -90,11 +122,35 @@ class MessageForm extends ComponentType {
     }
 
     uploadFile = (file:any, metadata:any) => {
-        console.log(file, metadata);
-    }
+        const pathToUpload = this.state.channel.id;
+        const ref = this.props.messagesRef;
+        //UUID creates random strings for pictures such as seen in social media imgs
+        const filePath = `chat/public/${uuidv4()}.jpg`;
+        
+        this.setState({
+            uploadState: 'uploading',
+            uploadTask: this.state.storageRef.child(filePath).put(file, metadata)
+
+        },  () => {
+            this.state.uploadTask.on('state_changed', (snap:any) => {
+                const percentUploaded = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+                this.setState({percentUploaded});
+            },
+                (err:Error) => {
+                    console.log(err);
+                    this.setState({
+                        errors: this.state.errors.concat(err),
+                        uploadState: 'error',
+                        uploadTask: null,
+                    })
+                }
+            )
+        });
+
+    }//=>END OF uploadFile
 
     render() {
-
+  
         const {errors, message, modal, loading} = this.state;
 
         return (

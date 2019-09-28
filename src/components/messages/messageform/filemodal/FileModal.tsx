@@ -1,9 +1,9 @@
 import React from 'react';
+import uuidv4 from 'uuid/v4';
 import { Modal, Input, Icon, Button } from 'semantic-ui-react'; 
 import ComponentType from '../../../../ComponentType';
 import {InputEvent} from '../../../../ComponentType';
 import mime from 'mime-types';
-
 
 
 class FileModal extends ComponentType {
@@ -13,8 +13,8 @@ class FileModal extends ComponentType {
     }
 
     addFile = (event:InputEvent) => {
-        // event.currentTarget.files[0] was giving a 'possibly null error' 
-        // where the type was identified as 'FILE | null'. So below, where 
+        // event.currentTarget.files[0] was giving a 'possibly null error' where the 
+        // type was identified as 'FILE | null'.So below(line22 setState({file: files[0]})), where 
         // checked if file is null I set state.file to be the index 0, file[0]
         const files = event.currentTarget.files;
         
@@ -46,6 +46,8 @@ class FileModal extends ComponentType {
     // }
     //                                        includes takes in any returns boolean
     //                                         mime  takes in string returns false
+    
+    // Check to see if file is an authorized type to be uploaded, using state.authorized
     isAuthorized = (filename:any) => this.state.authorized.includes(mime.lookup(filename));
     
     clearFile = () => this.setState({file: null});
