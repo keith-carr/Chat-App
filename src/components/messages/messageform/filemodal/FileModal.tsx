@@ -1,5 +1,4 @@
 import React from 'react';
-import uuidv4 from 'uuid/v4';
 import { Modal, Input, Icon, Button } from 'semantic-ui-react'; 
 import ComponentType from '../../../../ComponentType';
 import {InputEvent} from '../../../../ComponentType';
@@ -51,6 +50,7 @@ class FileModal extends ComponentType {
     isAuthorized = (filename:any) => this.state.authorized.includes(mime.lookup(filename));
     
     clearFile = () => this.setState({file: null});
+
 
     render() {
         const {modal, closeModal} = this.props;

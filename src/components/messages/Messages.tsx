@@ -33,7 +33,7 @@ class Messages extends ComponentType<IProps> {
             this.addListeners(channel.id);
        }
     }
-    
+     
     addListeners = (channelId:any) => {
         this.addMessageListener(channelId);
         return channelId;
@@ -66,16 +66,26 @@ class Messages extends ComponentType<IProps> {
             />
         ))
     )
-
+    
+    // isProgressBarVisible = (percent:number) => {
+    //     if(percent > 0) {
+    //         this.setState({progressBar: true});
+    //     }
+    // }
+    
+    displayChannelName = (channel:{id: number, name: string}) => channel ? `#${channel.name}` : '';
+    
     render() {
         const {messagesRef, messages, channel, user} = this.state; 
  
         return (
             <>
-            <MessagesHeader />
+            <MessagesHeader
+                channelName={this.displayChannelName(channel)}
+            />
             
             <Segment> 
-                <Comment.Group className={styles.message}>
+                <Comment.Group className={styles.messages}>
                     {this.displayMessages(messages)}
                 </Comment.Group>
             </Segment>
