@@ -10,9 +10,10 @@ import { connect } from 'react-redux';
 
 
 interface IProps {
-    key:any,
-    currentChannel:object,
-    currentUser:object,
+    key: any,
+    currentChannel: object,
+    currentUser: object,
+    numUniqueUsers: string
 }
 
 class Messages extends ComponentType<IProps> {
@@ -21,7 +22,8 @@ class Messages extends ComponentType<IProps> {
         messages: [],
         messagesLoading: true,
         channel: this.props.currentChannel,
-        user: this.props.currentUser
+        user: this.props.currentUser,
+        numUniqueUsers: ''
     }
 
     componentDidMount() {
@@ -65,6 +67,9 @@ class Messages extends ComponentType<IProps> {
             }
             return acc;
         },[]);
+        const plural = uniqueUsers.length > 1 || uniqueUsers.length === 0;
+        const numUniqueUsers = `${uniqueUsers.length} user${plural ? "s" : ""}`;
+        this.setState({numUniqueUsers});
     }
 
     displayMessages = (messages:Array<any>) => (
@@ -86,12 +91,13 @@ class Messages extends ComponentType<IProps> {
     displayChannelName = (channel:{id: number, name: string}) => channel ? `#${channel.name}` : '';
     
     render() {
-        const {messagesRef, messages, channel, user} = this.state; 
+        const {messagesRef, messages, channel, user, numUniqueUsers} = this.state; 
  
         return (
             <>
             <MessagesHeader
                 channelName={this.displayChannelName(channel)}
+                numUniqueUsers={numUniqueUsers}
             />
             
             <Segment> 

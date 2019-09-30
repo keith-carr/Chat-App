@@ -4,12 +4,13 @@ import ComponentType from '../../../ComponentType';
 
 interface IProps {
     channelName: string,
+    numUniqueUsers: number,
 }
 
 class MessagesHeader extends ComponentType<IProps> {
 
     render() {
-        const channelName = this.props.channelName;
+        const {channelName, numUniqueUsers} = this.props;
         return (
             <Segment clearing>
                 {/* Channel Title */}
@@ -19,7 +20,7 @@ class MessagesHeader extends ComponentType<IProps> {
                        <Icon name={'star outline'} color='black' />
                     </span>
                     
-                    <Header.Subheader>2 Users</Header.Subheader>
+                    <Header.Subheader>{numUniqueUsers}</Header.Subheader>
                 </Header>
 
                 {/* Channel Search Input */}
