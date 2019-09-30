@@ -53,9 +53,19 @@ class Messages extends ComponentType<IProps> {
                 messages: loadedMessages,
                 messagesLoading: false
             })
-
+            this.countUniqueUsers(loadedMessages);
         })
     };
+
+    //check to see if accumulator includes a specific name from 'messages' to see if its unique
+    countUniqueUsers = (messages:Array<any>) => {
+        const uniqueUsers = messages.reduce((acc,message) => {
+            if(!acc.includes(message.user.name)) {
+                acc.push(message.user.name);
+            }
+            return acc;
+        },[]);
+    }
 
     displayMessages = (messages:Array<any>) => (
         messages.length > 0 && messages.map((message:{timestamp:number}) => (
