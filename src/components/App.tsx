@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Grid} from 'semantic-ui-react';
 import ColorPanel from './colorpanel/ColorPanel'; 
 import SidePanel from './sidepanel/SidePanel';
@@ -15,8 +15,7 @@ export interface Store extends React.Props<any> {
   store?: any;
 }
 
-
-const App: React.FC = ({currentUser, currentChannel}:any) => {
+const App: React.FC = ({currentUser, currentChannel, isPrivateChannel}:any) => {
   return (
     <Grid columns="equal" className="app" style={{background: '#eee'}}>
       <ColorPanel />
@@ -29,6 +28,7 @@ const App: React.FC = ({currentUser, currentChannel}:any) => {
           key={currentChannel && currentChannel.id}
           currentChannel={currentChannel}
           currentUser={currentUser}
+          isPrivateChannel={isPrivateChannel}
         />
       </Grid.Column>
 
@@ -40,7 +40,8 @@ const App: React.FC = ({currentUser, currentChannel}:any) => {
 };
 const mapStateToProps = (state:any):any => ({
   currentUser: state.user.currentUser,
-  currentChannel: state.channel.currentChannel
+  currentChannel: state.channel.currentChannel,
+  isPrivateChannel: state.channel.isPrivateChannel
 }); 
 
 export default connect(mapStateToProps)(App);

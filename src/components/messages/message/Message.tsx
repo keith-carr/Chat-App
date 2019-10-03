@@ -2,7 +2,6 @@ import React from 'react';
 import moment from 'moment';
 import { Comment, Image } from 'semantic-ui-react';
 
-
 type messageType = {timestamp:number};
 
 interface IState {
@@ -15,7 +14,7 @@ const isOwnMessage = (message:any, user:any) =>
     message.user.id === user.uid ? 'message__self' : '';
 
 const isImage = (message:any) => 
-    message.image !== '' && message.content == '';
+    message.image !== '' && message.content === '';
 
 
 const timeFromNow = (timestamp:number) => moment(timestamp).fromNow();

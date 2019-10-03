@@ -6,31 +6,36 @@ import ComponentType from '../../ComponentType';
 import Message from './message/Message';
 import styles from './Messages.module.scss';
 import firebase from '../../firebase'; 
-import { connect } from 'react-redux';
+import {InputEvent, FormEvent} from '../../ComponentType';
 
 
 interface IProps {
     key: any,
     currentChannel: object,
     currentUser: object,
-    numUniqueUsers: string
+    isPrivateChannel: boolean,
 }
 
 class Messages extends ComponentType<IProps> {
     state:any = {
+        privateChannel: this.props.isPrivateChannel,
+        privateMessagesRef: firebase.database().ref('privateMessages'),
         messagesRef: firebase.database().ref('messages'),
         messages: [],
         messagesLoading: true,
         channel: this.props.currentChannel,
         user: this.props.currentUser,
-        numUniqueUsers: ''
+        numUniqueUsers: '',
+        searchTerm: '',
+        searchLoading: false,
+        searchResults: [],
     }
 
     componentDidMount() {
        const { channel, user } = this.state;
     //    const channelId = this.state.channel.id;
     //    console.log('Messages.tsx -> State channel.id: ', this.state.channel.id);
-       if(this.state.channel && this.state.user) {
+       if(channel && user) {
         // console.log('(2) Messages.tsx -> State channel.id: ', this.state.channel.id);
             this.addListeners(channel.id);
        }
@@ -48,7 +53,8 @@ class Messages extends ComponentType<IProps> {
      */
     addMessageListener = (channelId:any) => {
         let loadedMessages:Array<any> = [];
-        this.state.messagesRef
+        const ref = this.getMessagesRef();
+        ref.messagesRef
         .child(channelId).on("child_added", (snap:any) => {
             loadedMessages.push(snap.val());
             this.setState({
@@ -58,6 +64,38 @@ class Messages extends ComponentType<IProps> {
             this.countUniqueUsers(loadedMessages);
         })
     };
+
+    getMessagesRef = () => {
+        const { messagesRef, privateMessagesRef, privateChannel } = this.state;
+        return privateChannel ? privateMessagesRef : messagesRef;
+    }
+
+    /**
+     * Function that's passed so that MessageHeader can 
+     * have an effect in this upper Component Messages.
+     * Changes the search term in Messages and searchLoading:true.
+     */
+    handleSearchChange = (event:InputEvent) => {
+         this.setState({
+             searchTerm: event.currentTarget.value,
+             searchLoading: true,
+         }, () => this.handleSearchMessages());
+    }
+
+    handleSearchMessages = () => {
+        const channelMessages = [...this.state.messages];
+        const regex = new RegExp(this.state.searchTerm, 'gi');
+        const searchResults = channelMessages.reduce((acc, message) => {
+            if(message.content && message.content.match(regex) ||
+               message.user.name.match(regex)
+            ) {
+                acc.push(message);
+            }
+            return acc;
+        }, []);
+        this.setState({ searchResults });
+        setTimeout(() => this.setState({ searchLoading: false}), 1000);
+    }
 
     //check to see if accumulator includes a specific name from 'messages' to see if its unique
     countUniqueUsers = (messages:Array<any>) => {
@@ -88,21 +126,27 @@ class Messages extends ComponentType<IProps> {
     //     }
     // }
     
-    displayChannelName = (channel:{id: number, name: string}) => channel ? `#${channel.name}` : '';
+    displayChannelName = (channel:{id: number, name: string}) => 
+    channel ? `${this.state.privateChannel ? '@' : '#'}${channel.name}` : '';
     
     render() {
-        const {messagesRef, messages, channel, user, numUniqueUsers} = this.state; 
+        const {messagesRef, messages, channel, user, numUniqueUsers,
+             searchTerm, searchResults, searchLoading, privateChannel} = this.state; 
  
         return (
             <>
             <MessagesHeader
                 channelName={this.displayChannelName(channel)}
                 numUniqueUsers={numUniqueUsers}
+                handleSearchChange={this.handleSearchChange}
+                searchLoading={searchLoading}
+                isPrivateChannel={privateChannel}
             />
             
             <Segment> 
                 <Comment.Group className={styles.messages}>
-                    {this.displayMessages(messages)}
+                    {searchTerm ? this.displayMessages(searchResults) :
+                     this.displayMessages(messages)}
                 </Comment.Group>
             </Segment>
 
@@ -110,6 +154,8 @@ class Messages extends ComponentType<IProps> {
                 messagesRef={messagesRef}
                 currentChannel={channel}
                 currentUser={user}
+                isPrivateChannel={privateChannel}
+                getMessageRef={this.getMessagesRef}
             />
             </>
         )

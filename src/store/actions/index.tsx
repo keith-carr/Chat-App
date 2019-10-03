@@ -3,6 +3,8 @@ export {setUser} from './setUser';
 
 export {setCurrentChannel} from './setCurrentChannel';
 
+export {setPrivateChannel} from './setPrivateChannel';
+
 // import * as actionTypes from "./actionTypes";
 
 // /* User Actions */

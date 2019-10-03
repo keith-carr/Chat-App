@@ -3,7 +3,7 @@ import { Menu, Icon, Modal, Input, Button } from 'semantic-ui-react';
 import { Form } from 'semantic-ui-react';
 import firebase from '../../../firebase';
 
-import {setCurrentChannel} from '../../../store/actions';
+import {setCurrentChannel, setPrivateChannel} from '../../../store/actions';
 import {connect} from 'react-redux';
 
 
@@ -38,7 +38,8 @@ interface IProps {
     currentUser:User,
     changeChannel?:(channel:object) => void,
     setCurrentChannel?:any,
-    setActiveChannel?:() => void
+    setActiveChannel?:() => void,
+    setPrivateChannel?:any,
 }
 
 class Channels extends React.Component<IProps> {
@@ -85,6 +86,7 @@ class Channels extends React.Component<IProps> {
     changeChannel = (channel:Channel) => {
         this.props.setCurrentChannel(channel);
         this.setActiveChannel(channel);
+        this.props.setPrivateChannel(false);
     }
 
    setActiveChannel = (channel:Channel) =>
@@ -154,7 +156,7 @@ class Channels extends React.Component<IProps> {
         let {channels, isModalOpen} = this.state;
         return (
             <React.Fragment>
-        <Menu.Menu style={{ paddingBottom: "2em" }}>
+        <Menu.Menu className="menu">
           <Menu.Item>
             <span>
               <Icon name="exchange" /> CHANNELS
@@ -206,7 +208,7 @@ class Channels extends React.Component<IProps> {
 
 export default connect<any, any>(
     null,
-    { setCurrentChannel }
+    { setCurrentChannel, setPrivateChannel }
   )(Channels);
   
 // const mapDispatchToProps = (dispatch:any) => {

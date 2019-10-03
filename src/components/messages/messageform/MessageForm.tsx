@@ -46,7 +46,8 @@ interface IProps {
                     photoURL: string
                 },
     messagesRef: any,
-
+    isPrivateChannel: boolean,
+    getMessagesRef: any,
 }
 
 class MessageForm extends ComponentType<IProps> {
@@ -112,13 +113,12 @@ class MessageForm extends ComponentType<IProps> {
      * @returns {void}
      */
     sendMessage = (): void => {
-        const { messagesRef } = this.props;
+        const { getMessagesRef } = this.props;
         const { message, channel } = this.state;
 
         if(message) {
             this.setState({loading: true});
-            console.log('SendMessage() -> Message Ref: ', messagesRef);
-            messagesRef
+            getMessagesRef()
                 .child(channel.id)
                 .push()
                 .set(this.createMessage())
@@ -140,11 +140,19 @@ class MessageForm extends ComponentType<IProps> {
         }
     }
 
+    getPath = () => {
+        if(this.props.isPrivateChannel) {
+            return `chat/private-${this.state.channel.id}`;
+        } else {
+            return 'chat/public';
+        }
+    }
+
     uploadFile = (file:any, metadata:any) => {
         const pathToUpload = this.state.channel.id;
-        const ref = this.props.messagesRef;
+        const ref = this.props.messagesRef();
         //UUID creates random strings for pictures such as seen in social media imgs
-        const filePath = `chat/public/${uuidv4()}.jpg`;
+        const filePath = `${this.getPath()}/${uuidv4()}.jpg`;
         
         this.setState({
             uploadState: 'uploading',
