@@ -14,24 +14,27 @@ type User = {displayName:string, photoURL:string};
 export interface Channel {id:number, name:string};
 
 export interface INewChannel {
-    id:string,
-    name:string,
-    details:string,
+    id: string,
+    name: string,
+    details: string,
     createdBy: {
-        name:string,
-        avatar:string
+        name: string,
+        avatar: string
     }
 }
 
 interface IState {
         user:User,
-        channels:any,
-        channelName:string,
-        channelDetails:string,
-        isModalOpen:boolean,
-        channelsRef:any,
-        firstLoad:boolean,
-        activeChannel:string
+        channel:Channel,
+        channels: any,
+        channelName: string,
+        channelDetails: string,
+        isModalOpen: boolean,
+        channelsRef: any,
+        messagesRef: any,
+        notifications:[],
+        firstLoad: boolean,
+        activeChannel: string
 }
 
 interface IProps {
@@ -45,10 +48,13 @@ interface IProps {
 class Channels extends React.Component<IProps> {
     state:IState = {
         user: this.props.currentUser,
+        channel: {id:0, name: ''},
         channels: [], // ?????????? ---- COULD CAUSE PROBLEMS IN CHANNEL SWITCHING //
         channelName: '',
         channelDetails: '',
         channelsRef: firebase.database().ref('channels'),
+        messagesRef: firebase.database().ref('messages'),
+        notifications: [],
         isModalOpen:false,
         firstLoad: true,
         activeChannel: '',
@@ -64,9 +70,10 @@ class Channels extends React.Component<IProps> {
 
     addListenters() {
         let loadedChannels:Array<object> = [];  
-        this.state.channelsRef.on('child_added', (snap:{val:()=>object}) =>{
+        this.state.channelsRef.on('child_added', (snap:{val:()=>object, key:number}) =>{
             loadedChannels.push( snap.val() );
             this.setState({channels: loadedChannels}, () => this.setFirstChannel());
+            this.addNotificationListener(snap.key);
         });
     }
 
@@ -87,7 +94,37 @@ class Channels extends React.Component<IProps> {
         this.props.setCurrentChannel(channel);
         this.setActiveChannel(channel);
         this.props.setPrivateChannel(false);
+        this.setState({ channel });
+        
     }
+
+    addNotificationListener = (channelId:number) => {
+      this.state.messagesRef.child(channelId).on('value', (snap:any) => {
+        if(this.state.channel) {
+          this.handleNotifications(channelId, this.state.channel.id, this.state.notifications,snap)
+        }
+      })
+    }  
+    
+    handleNotifications = (channelId: number, currentChannelId: any, notifications:any, snap:any) => {
+      let lastTotal = 0;
+
+      let index = notifications.findIndex((notification:{id:number}) => notification.id === channelId);
+    
+      if(index !== -1) {
+        notifications.push({
+          id: channelId,
+          total: snap.numChildren(),
+          lastKnownTotal: snap.numChildren(),
+        })
+      } else {
+        notifications.push({
+          id: channelId,
+          total: snap.numChildren(),
+          lastKnownTotal:snap.numChildren(),
+        })
+      }
+    } 
 
    setActiveChannel = (channel:Channel) =>
     this.setState({activeChannel: channel.id})

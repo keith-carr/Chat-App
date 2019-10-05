@@ -10,13 +10,14 @@ type UserType = {status: string, name: string, uid: string };
 
 interface IProps {
     currentUser:UserType,
-    setCurrentChannel?: typeof setCurrentChannel,
-    setPrivateChannel?: typeof setPrivateChannel,
+    setCurrentChannel?:any,
+    setPrivateChannel?:any,
 }
 
 class DirectMessages extends ComponentType<IProps> {
 
     state = {
+        activeChannel: '',
         user: this.props.currentUser,
         users: [], 
         usersRef: firebase.database().ref('users'),
@@ -85,6 +86,7 @@ class DirectMessages extends ComponentType<IProps> {
         }
         this.props.setCurrentChannel(channelData);
         this.props.setPrivateChannel(true);
+        this.setActiveChannel(user.uid);
     }
 
     getChannelId = (userId:string) => {
@@ -93,8 +95,12 @@ class DirectMessages extends ComponentType<IProps> {
          `${userId}/${currentUserId}` : `${currentUserId}/${userId}`;
     }
 
+    setActiveChannel = (userId: string) => {
+        this.setState({ activeChannel: userId });
+    }
+
     render() {
-        const { users } = this.state;
+        const { users, activeChannel } = this.state;
         return (
             <Menu.Menu className='menu'>
                 <Menu.Item>
@@ -107,6 +113,7 @@ class DirectMessages extends ComponentType<IProps> {
                 {users.map((user:UserType) => (
                     <Menu.Item
                         key={user.uid}
+                        active={user.uid == activeChannel}
                         onClick={() => this.changeChannel(user)}
                         style={{opacity: 0.7, fontStyle: 'italic'}}
                     >

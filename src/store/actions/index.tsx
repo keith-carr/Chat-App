@@ -5,6 +5,14 @@ export {setCurrentChannel} from './setCurrentChannel';
 
 export {setPrivateChannel} from './setPrivateChannel';
 
+// export {setPrivateChannel, setCurrentChannel} from './channelActions';
+
+
+
+
+
+
+
 // import * as actionTypes from "./actionTypes";
 
 // /* User Actions */

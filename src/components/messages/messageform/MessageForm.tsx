@@ -38,6 +38,7 @@ interface IState {
         modal: boolean,
 }
 
+
 interface IProps {
     currentChannel: {id: number},
     currentUser: {  

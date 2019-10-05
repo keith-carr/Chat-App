@@ -19,7 +19,7 @@ interface IProps {
 class Messages extends ComponentType<IProps> {
     state:any = {
         privateChannel: this.props.isPrivateChannel,
-        privateMessagesRef: firebase.database().ref('privateMessages'),
+        privateMessagesRef: firebase.database().ref("privateMessages"),
         messagesRef: firebase.database().ref('messages'),
         messages: [],
         messagesLoading: true,
@@ -51,24 +51,23 @@ class Messages extends ComponentType<IProps> {
      * @param {channelID:string} 
      * @return {void}
      */
-    addMessageListener = (channelId:any) => {
+    addMessageListener = (channelId: any):void => {
         let loadedMessages:Array<any> = [];
         const ref = this.getMessagesRef();
-        ref.messagesRef
-        .child(channelId).on("child_added", (snap:any) => {
-            loadedMessages.push(snap.val());
-            this.setState({
-                messages: loadedMessages,
-                messagesLoading: false
-            })
-            this.countUniqueUsers(loadedMessages);
-        })
-    };
+        ref.child(channelId).on("child_added", (snap:any) => {
+          loadedMessages.push(snap.val());
+          this.setState({
+            messages: loadedMessages,
+            messagesLoading: false
+          });
+          this.countUniqueUsers(loadedMessages);
+        });
+      };
 
     getMessagesRef = () => {
         const { messagesRef, privateMessagesRef, privateChannel } = this.state;
         return privateChannel ? privateMessagesRef : messagesRef;
-    }
+      };
 
     /**
      * Function that's passed so that MessageHeader can 
@@ -155,7 +154,7 @@ class Messages extends ComponentType<IProps> {
                 currentChannel={channel}
                 currentUser={user}
                 isPrivateChannel={privateChannel}
-                getMessageRef={this.getMessagesRef}
+                getMessagesRef={this.getMessagesRef}
             />
             </>
         )
