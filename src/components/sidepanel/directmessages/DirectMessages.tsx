@@ -113,7 +113,7 @@ class DirectMessages extends ComponentType<IProps> {
                 {users.map((user:UserType) => (
                     <Menu.Item
                         key={user.uid}
-                        active={user.uid == activeChannel}
+                        active={user.uid === activeChannel}
                         onClick={() => this.changeChannel(user)}
                         style={{opacity: 0.7, fontStyle: 'italic'}}
                     >

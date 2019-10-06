@@ -111,7 +111,7 @@ class Messages extends ComponentType<IProps> {
 
     displayMessages = (messages:Array<any>) => (
         messages.length > 0 && messages.map((message:{timestamp:number}) => (
-            <Message
+            <Message 
                 key={message.timestamp}
                 message={message}
                 user={this.state.user}
@@ -143,7 +143,7 @@ class Messages extends ComponentType<IProps> {
             />
             
             <Segment> 
-                <Comment.Group className={styles.messages}>
+                <Comment.Group style={{maxWidth:'98%'}} className={styles.messages}>
                     {searchTerm ? this.displayMessages(searchResults) :
                      this.displayMessages(messages)}
                 </Comment.Group>
