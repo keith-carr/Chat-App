@@ -50,7 +50,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "homepage": "http://gitname.github.io/Chat-App",
+  "homepage": "https://kcee403.github.io/Chat-App",
   "eslintConfig": {
     "extends": "react-app"
   },
