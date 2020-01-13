@@ -14,6 +14,23 @@ interface IProps {
     currentChannel: object,
     currentUser: object,
     isPrivateChannel: boolean,
+    handleStar?: () => void,
+    starChannel?: () => void
+}
+
+interface IState {
+    privateChannel: boolean,
+    privateMessagesRef: any,
+    messagesRef: any,
+    messages: [],
+    messagesLoading: boolean,
+    channel: object,
+    user: object,
+    numUniqueUsers: string,
+    searchTerm: string,
+    searchLoading: boolean,
+    searchResults: [],
+    isChannelStarred: boolean
 }
 
 class Messages extends ComponentType<IProps> {
@@ -29,6 +46,7 @@ class Messages extends ComponentType<IProps> {
         searchTerm: '',
         searchLoading: false,
         searchResults: [],
+        isChannelStarred: false,
     }
 
     componentDidMount() {
@@ -69,6 +87,19 @@ class Messages extends ComponentType<IProps> {
         return privateChannel ? privateMessagesRef : messagesRef;
       };
 
+    handleStar = () => {
+        this.setState((prevState:{isChannelStarred: boolean}) => ({
+            isChannelStarred: !prevState.isChannelStarred
+        }), () => this.starChannel());
+    }
+
+    starChannel = () => {
+        if(this.state.isChannelStarred) {
+            console.log('star');
+        } else {
+            console.log('unstar');
+        }
+    }
     /**
      * Function that's passed so that MessageHeader can 
      * have an effect in this upper Component Messages.
@@ -130,7 +161,7 @@ class Messages extends ComponentType<IProps> {
     
     render() {
         const {messagesRef, messages, channel, user, numUniqueUsers,
-             searchTerm, searchResults, searchLoading, privateChannel} = this.state; 
+             searchTerm, searchResults, searchLoading, privateChannel, isChannelStarred} = this.state; 
  
         return (
             <>
@@ -140,6 +171,8 @@ class Messages extends ComponentType<IProps> {
                 handleSearchChange={this.handleSearchChange}
                 searchLoading={searchLoading}
                 isPrivateChannel={privateChannel}
+                handleStar={this.handleStar}
+                isChannelStarred={isChannelStarred}
             />
             
             <Segment> 

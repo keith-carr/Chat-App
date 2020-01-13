@@ -4,6 +4,8 @@ import { Menu } from 'semantic-ui-react';
 import UserPanel from './userpanel/UserPanel';
 import Channels from './channels/Channels';
 import DirectMessages from './directmessages/DirectMessages';
+import Starred from './starred/Starred';
+
 
 class SidePanel extends ComponentType {
     render() {
@@ -16,9 +18,9 @@ class SidePanel extends ComponentType {
                 fixed="left"
                 vertical
                 style={{background: "#4c3c4c", fontSize: "1.2rem"}}
-            >
-                
+            >   
                 <UserPanel currentUser={currentUser} />
+                <Starred />
                 <Channels currentUser={currentUser} />
                 <DirectMessages currentUser={currentUser} />
             </Menu>

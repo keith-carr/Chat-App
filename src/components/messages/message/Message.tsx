@@ -37,3 +37,4 @@ const Message = ({message, user}:any) => (
         </>
     );
 export default Message;
+ 

@@ -42,7 +42,6 @@ interface IState {
         activeChannel: string
 }
 
-
 interface IProps {
     currentUser:User,
     changeChannel?:(channel:object) => void,
@@ -211,6 +210,7 @@ class Channels extends React.Component<IProps> {
     handleSubmit = (event:FormEvent) => {
         event.preventDefault();
         if(this.isFormValid(this.state)) {
+            this.addChannel();
             console.log('channel added');
         }
     }
@@ -227,7 +227,7 @@ class Channels extends React.Component<IProps> {
 
         let {channels, isModalOpen} = this.state;
         return (
-            <React.Fragment>
+        <React.Fragment>
         <Menu.Menu className="menu">
           <Menu.Item>
             <span>
