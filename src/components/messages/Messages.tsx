@@ -8,14 +8,14 @@ import styles from './Messages.module.scss';
 import firebase from '../../firebase'; 
 import {InputEvent, FormEvent} from '../../ComponentType';
 
-
 interface IProps {
     key: any,
     currentChannel: object,
     currentUser: object,
     isPrivateChannel: boolean,
     handleStar?: () => void,
-    starChannel?: () => void
+    starChannel?: () => void,
+    addUserStarsListener?: () => void,
 }
 
 interface IState {
@@ -26,6 +26,7 @@ interface IState {
     messagesLoading: boolean,
     channel: object,
     user: object,
+    userRef: object,
     numUniqueUsers: string,
     searchTerm: string,
     searchLoading: boolean,
@@ -42,6 +43,7 @@ class Messages extends ComponentType<IProps> {
         messagesLoading: true,
         channel: this.props.currentChannel,
         user: this.props.currentUser,
+        usersRef: firebase.database().ref('users'),
         numUniqueUsers: '',
         searchTerm: '',
         searchLoading: false,
@@ -56,7 +58,23 @@ class Messages extends ComponentType<IProps> {
        if(channel && user) {
         // console.log('(2) Messages.tsx -> State channel.id: ', this.state.channel.id);
             this.addListeners(channel.id);
+            this.addUserStarsListener(channel.id, user.uid);
        }
+    }
+
+    addUserStarsListener = (channelId: string, userId: number) => {
+        this.state.usersRef
+            .child(userId)
+            .child('starred')
+            .once('value')
+            .then((data: {val:()=>any}) => {
+                 if(data.val() !== null) {
+                    const channelIds = Object.keys(data.val());
+                    const prevStarred = channelIds.includes(channelId);
+                    this.setState({ isChannelStarred: prevStarred});
+                 }
+            })
+         
     }
      
     addListeners = (channelId:any) => {
@@ -95,9 +113,29 @@ class Messages extends ComponentType<IProps> {
 
     starChannel = () => {
         if(this.state.isChannelStarred) {
-            console.log('star');
+            this.state.usersRef
+                .child(`${this.state.user.uid}/starred`) //UsersRef object has a child which is like a property, then state.user 
+                                                         //represents specific user and reacheds in the /starred directory
+                .update({
+                    [this.state.channel.id]: {
+                        name: this.state.channel.name,
+                        details: this.state.channel.details,
+                        createBy: {
+                            name: this.state.channel.createdBy.name,
+                            avatar: this.state.channel.createdBy.avatar,
+                        }
+                    }
+                });
+            
         } else {
-            console.log('unstar');
+            this.state.usersRef
+                .child(`${this.state.user.uid}/starred`)
+                .child(this.state.channel.id)
+                .remove((err:Error) => {
+                    if(err !== null) {
+                        console.error(err);
+                    }
+                })
         }
     }
     /**
