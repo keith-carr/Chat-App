@@ -14,7 +14,7 @@ class MetaPanel extends ComponentType {
         let {activeIndex} = this.state;
         return (
             <Segment>
-                <Header as='h3' attached='top'>
+                {/* <Header as='h3' attached='top'>
                     About # Channel
                 </Header>
                 <Accordion style attached='true'>
@@ -23,7 +23,7 @@ class MetaPanel extends ComponentType {
                     index={0}
                     // onClick={this.setActiveIndex}
                     ></Accordion.Title>
-                </Accordion>
+                </Accordion> */}
             </Segment>
         )
     }
