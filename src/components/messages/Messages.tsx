@@ -73,8 +73,7 @@ class Messages extends ComponentType<IProps> {
                     const prevStarred = channelIds.includes(channelId);
                     this.setState({ isChannelStarred: prevStarred});
                  }
-            })
-         
+            }) 
     }
      
     addListeners = (channelId:any) => {

@@ -24,7 +24,6 @@
     "check-prop-types": "^1.1.2",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.0",
-    "firebase": "^6.0.2",
     "md5": "^2.2.1",
     "mime-types": "^2.1.24",
     "moment": "^2.24.0",

@@ -3,57 +3,90 @@ import { Menu, Label, Icon } from "semantic-ui-react";
 import { IChannel } from "../../App";
 import { setPrivateChannel, setCurrentChannel } from "../../../store/actions";
 import { connect } from "react-redux";
-import firebase from "firebase";
+import firebase from "../../../firebase";
+import {INewChannel} from '../channels/Channels';
 
 interface IProps {
-  setCurrentChannel: (channel: object) => any;
-  setPrivateChannel: (isPrivate: boolean) => any;
-  currentUser: object;
+  setCurrentChannel: (channel: object) => any,
+  setPrivateChannel: (isPrivate: boolean) => any,
+  currentUser: any,
 }
 
-const Starred = (props: IProps) => {
-  const [starredChannels, setStarred] = useState<any>([]);
-  const [activeChannel, setActive] = useState({});
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [usersRef, setUsersRef] = useState<any>(firebase.database().ref);
-  const [user, setUser] = useState<any>(props.currentUser);
+class Starred extends React.Component<IProps> {
 
-  React.useEffect(
-    () => {
-      if(user) {
-        addListeners(user.uid);
-      }
-    }
-  );
+  state = {
+    starredChannels: [],
+    activeChannel: {},
+    openModal: false,
+    usersRef: firebase.database().ref('users'),
+    user: this.props.currentUser,
+  }
 
-  const addListeners = (userId: number) => 
-    usersRef
-    .child(userId)
-    .child('starred')
-    .on('child_added', (snap: any) => {
-        const starredChannel = {id: snap.key, ...snap.val() };
-        setStarred([...starredChannels, starredChannel])
-    })
+  componentDidMount() {
+    if(this.state.user) {
+      this.addListeners(this.state.user.uid);
+    }    
+  }
   
+  addListeners = (userId: string) => {
+    // usersRef
+    // .child(userId)
+    // .child('starred')
+    // .on('child_added', (snap: any) => {
+    //     const starredChannel = {id: snap.key, ...snap.val() };
+    //     setStarred([...starredChannels, starredChannel])
+    // });
+  
+    this.state.usersRef
+      .child(userId)
+      .child('starred')
+      .on('child_added', (snap: any) => {
+        const starredChannel = {id: snap.key, ...snap.val()};
+        this.setState({
+          starredChannels: [...this.state.starredChannels, starredChannel]});
+      });
+      console.log('Length of starredChannels[]: ', this.state.starredChannels.length);
+  
+      this.state.usersRef
+      .child(userId)
+      .child('starred')
+      .on('child_removed', (snap:any) => {
+          const channelToRemove = { id: snap.key, ...snap.val() };
+          const filteredChannels = this.state.starredChannels.filter( (channel:any) => {
+            return channel.id !== channelToRemove.id;
+          });
+          this.setState({ starredChannels: filteredChannels});
+      })
+    //   usersRef
+    // .child(userId)
+    // .child('starred')
+    // .on('child_removed', (snap: any) => {
+    //     const channelToRemove = { id: snap.key, ...snap.val()};
+    //     const filteredChannels = starredChannels.filter((channel: IChannel) => {
+    //         return channel.id !== channelToRemove.id;
+    //     });
+    //     setStarred(filteredChannels);
+    // });
+  }
 
-  const setActiveChannel = (channel: IChannel) => setActive(channel);
+  setActiveChannel = (channel: IChannel) => this.setState({activeChannel: channel.id});
 
-  const changeChannel = (channel: IChannel) => {
-    props.setCurrentChannel(channel);
-    setActiveChannel(channel);
-    props.setPrivateChannel(false);
+  changeChannel = (channel: IChannel) => {
+    this.props.setCurrentChannel(channel);
+    this.setActiveChannel(channel);
+    this.props.setPrivateChannel(false);
   };
 
-  const displayChannels = (channels: [object]) => {
+  displayChannels = (channels: Array<any>) => {
     let newChannels =
       channels.length > 0 &&
       channels.map((channel: any) => (
         <Menu.Item
           key={channel.id + channel.name}
-          onClick={() => changeChannel(channel)}
+          onClick={() => this.changeChannel(channel)}
           name={channel.name}
           style={{ opacity: 0.7 }}
-          active={channel.id === activeChannel}
+          active={channel.id === this.state.activeChannel}
         >
           # {channel.name}
         </Menu.Item>
@@ -61,19 +94,25 @@ const Starred = (props: IProps) => {
     return newChannels;
   };
 
-  return (
-    <>
-      <Menu.Menu className="menu">
-        <Menu.Item>
-          <span>
-            <Icon name="star" /> STARRED
-          </span>{" "}
-          ({starredChannels.length}) <Icon name="add" onClick={openModal} />
-        </Menu.Item>
-        {displayChannels}
-      </Menu.Menu>
-    </>
-  );
+  render() {
+
+    const {starredChannels} = this.state;
+
+    return (
+      <>
+        <Menu.Menu className="menu">
+          <Menu.Item>
+            <span>
+              <Icon name="star" /> STARRED
+            </span>{" "}
+            ({starredChannels.length}) <Icon name="add" onClick={this.state.openModal} />
+          </Menu.Item>
+          {this.displayChannels(starredChannels)}
+        </Menu.Menu>
+      </>
+    );
+  }
 };
 
 export default connect(null, { setCurrentChannel, setPrivateChannel })(Starred);
+
