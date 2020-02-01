@@ -17,7 +17,7 @@ export type Notification = {
   count: number,
 }
 
-export interface IChannel {id:number, name:string};
+export interface IChannel {id:number, name:string, details: string};
 
 export interface INewChannel {
     id: string,
@@ -39,6 +39,7 @@ interface Props {
 }
 
 const App: React.FC = ({currentUser, currentChannel, isPrivateChannel}:any) => {
+  
   return (
     <Grid columns="equal" className="app" style={{background: '#eee'}}>
       <ColorPanel />
@@ -56,7 +57,10 @@ const App: React.FC = ({currentUser, currentChannel, isPrivateChannel}:any) => {
       </Grid.Column>
 
       <Grid.Column width={4}>
-        <MetaPanel />      
+        <MetaPanel
+          key={currentChannel && currentChannel.id}
+          currentChannel={currentChannel}
+          isPrivateChannel={isPrivateChannel} />      
       </Grid.Column>
     </Grid>
     );

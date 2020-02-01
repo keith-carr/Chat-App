@@ -42,11 +42,9 @@ const store = createStore(
 class Root extends ComponentType {
   // Root will be in the connect()()
   componentDidMount() {
-    console.log(this.props.isLoading);
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.props.setUser(user);
-        console.log("USER IN INDEX.TSX: ", user.displayName);
         this.props.history.push("/");
       } else {
         this.props.history.push('/login');

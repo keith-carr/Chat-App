@@ -6,7 +6,7 @@ import ComponentType from '../../ComponentType';
 import Message from './message/Message';
 import styles from './Messages.module.scss';
 import firebase from '../../firebase'; 
-import {InputEvent, FormEvent} from '../../ComponentType';
+import {InputEvent} from '../../ComponentType';
 
 interface IProps {
     key: any,
@@ -52,11 +52,10 @@ class Messages extends ComponentType<IProps> {
     }
 
     componentDidMount() {
+
        const { channel, user } = this.state;
-    //    const channelId = this.state.channel.id;
-    //    console.log('Messages.tsx -> State channel.id: ', this.state.channel.id);
+
        if(channel && user) {
-        // console.log('(2) Messages.tsx -> State channel.id: ', this.state.channel.id);
             this.addListeners(channel.id);
             this.addUserStarsListener(channel.id, user.uid);
        }
@@ -175,6 +174,21 @@ class Messages extends ComponentType<IProps> {
         const plural = uniqueUsers.length > 1 || uniqueUsers.length === 0;
         const numUniqueUsers = `${uniqueUsers.length} user${plural ? "s" : ""}`;
         this.setState({numUniqueUsers});
+    }
+
+    countUsersPosts = (messages:Array<string>) => {
+        let userPosts = messages.reduce((acc:any, message:any):any => {
+            if(message.user.name in acc) {
+                acc[message.user.name].count += 1;
+            } else {
+                acc[message.user.name] = {
+                    avatar: message.user.avatar,
+                    count: 1
+                }
+            }
+            return acc;
+        }, {});
+        console.log(userPosts);
     }
 
     displayMessages = (messages:Array<any>) => (

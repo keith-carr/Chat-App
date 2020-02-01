@@ -22,11 +22,11 @@ const setup = (initialState = {}) => {
 };
 
 test("renders the form", () => {
-  let wrapper: IWrapper;
-  wrapper = setup();
-  let formComponent = findByTestAttr(wrapper, "form-component");
-  expect(formComponent.length).toBe(1);
-});
+    let wrapper: IWrapper;
+    wrapper = setup();
+    let formComponent = findByTestAttr(wrapper, "form-component");
+    expect(formComponent.length).toBe(1);
+  });
 
 const inputSetup = (Component:any, state:object) => {
   const wrapper = shallow(<Component />);
@@ -51,7 +51,7 @@ describe("Input Component ", () => {
     findInputUsername = () => findByTestAttr(wrapper, "username-input").prop("value");
   });
  
-  test(" contains correct value as initital state", () => {
+test(" contains correct value as initital state", () => {
     const inputString = findInputUsername();
     expect(inputString).toBe(initialState.username);
   });

@@ -5,6 +5,7 @@ import { setPrivateChannel, setCurrentChannel } from "../../../store/actions";
 import { connect } from "react-redux";
 import firebase from "../../../firebase";
 import {INewChannel} from '../channels/Channels';
+import ComponentType from '../../../ComponentType';
 
 interface IProps {
   setCurrentChannel: (channel: object) => any,
@@ -12,7 +13,7 @@ interface IProps {
   currentUser: any,
 }
 
-class Starred extends React.Component<IProps> {
+class Starred extends ComponentType<IProps> {
 
   state = {
     starredChannels: [],
@@ -45,7 +46,6 @@ class Starred extends React.Component<IProps> {
         this.setState({
           starredChannels: [...this.state.starredChannels, starredChannel]});
       });
-      console.log('Length of starredChannels[]: ', this.state.starredChannels.length);
   
       this.state.usersRef
       .child(userId)

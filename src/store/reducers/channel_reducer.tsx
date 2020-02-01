@@ -3,7 +3,7 @@ import {IChannel} from '../actions/setCurrentChannel'
 
 
 const initialChannelState = {
-  currentChannel: null
+  currentChannel: '',
 };
 
 const channel_reducer = (state = initialChannelState, action:any) => {
