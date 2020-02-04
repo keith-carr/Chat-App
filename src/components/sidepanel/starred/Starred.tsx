@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { Menu, Label, Icon } from "semantic-ui-react";
+import React from "react";
+import { Menu, Icon } from "semantic-ui-react";
 import { IChannel } from "../../App";
 import { setPrivateChannel, setCurrentChannel } from "../../../store/actions";
 import { connect } from "react-redux";
 import firebase from "../../../firebase";
-import {INewChannel} from '../channels/Channels';
 import ComponentType from '../../../ComponentType';
 
 interface IProps {
@@ -57,16 +56,6 @@ class Starred extends ComponentType<IProps> {
           });
           this.setState({ starredChannels: filteredChannels});
       })
-    //   usersRef
-    // .child(userId)
-    // .child('starred')
-    // .on('child_removed', (snap: any) => {
-    //     const channelToRemove = { id: snap.key, ...snap.val()};
-    //     const filteredChannels = starredChannels.filter((channel: IChannel) => {
-    //         return channel.id !== channelToRemove.id;
-    //     });
-    //     setStarred(filteredChannels);
-    // });
   }
 
   setActiveChannel = (channel: IChannel) => this.setState({activeChannel: channel.id});
@@ -74,7 +63,7 @@ class Starred extends ComponentType<IProps> {
   changeChannel = (channel: IChannel) => {
     this.props.setCurrentChannel(channel);
     this.setActiveChannel(channel);
-    this.props.setPrivateChannel(false);
+    this.props.setPrivateChannel(true);
   };
 
   displayChannels = (channels: Array<any>) => {
@@ -85,7 +74,7 @@ class Starred extends ComponentType<IProps> {
           key={channel.id + channel.name}
           onClick={() => this.changeChannel(channel)}
           name={channel.name}
-          style={{ opacity: 0.7 }}
+          style={{ opacity: 0.95 }}
           active={channel.id === this.state.activeChannel}
         >
           # {channel.name}

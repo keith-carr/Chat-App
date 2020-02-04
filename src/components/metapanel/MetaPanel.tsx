@@ -1,19 +1,20 @@
 import React from 'react';
 import ComponentType from '../../ComponentType';
-import { Segment, Header, Accordion, Icon, Image } from 'semantic-ui-react';
-import { IChannel } from '../App';
+import { Segment, Header, Accordion, Icon, Image, List } from 'semantic-ui-react';
 import classes from './MetaPanel.module.scss';
 
 interface IProps {
     isPrivateChannel: boolean,
     currentChannel: any, 
+    userPosts: any,
 }
 
 class MetaPanel extends ComponentType<IProps> {
     state = {
         activeIndex: 0,
         privateChannel: this.props.isPrivateChannel,
-        currentChannel: this.props.currentChannel
+        currentChannel: this.props.currentChannel,
+        userPosts: this.props.userPosts,
     }
 
     componentDidMount() {
@@ -21,19 +22,38 @@ class MetaPanel extends ComponentType<IProps> {
         console.log('current Channel object in componentDidMount: ', this.state.currentChannel);
     }
 
+    formatCount = (num: any) => (num > 1 || num === 0 ? `${num} posts` : `${num} post`);
+
+    displayTopPosters = (posts: any) =>
+        Object.entries(posts)
+              .sort((a:any, b:any) => b[1] - a[1])
+              .map(([key, val]:any, i) => (
+                <List.Item key={i}>
+                    <Image avatar src={val.avatar} />
+                    <List.Content>
+                        <List.Header as ='a'>{key}</List.Header>
+                        <List.Description>{this.formatCount(val.count)} posts</List.Description>
+                    </List.Content>
+                </List.Item>
+              ))
+              .slice(0, 5);
+
     setActiveIndex = (event: any, titleProps:{index:number}) => {
         const { index } = titleProps;
         const { activeIndex } = this.state;
+        
         const newIndex = activeIndex === index ? -1 : index;
         this.setState({ activeIndex: newIndex })
     }
 
     render() {
         let {activeIndex, privateChannel, currentChannel} = this.state;
+        const { userPosts } = this.props;
 
         if(privateChannel=== true) { 
             return null;
         }
+
         return (
             <Segment loading={!currentChannel} id={classes.metaPanel} >
                 <Header as='h3' attached='top'>
@@ -62,7 +82,10 @@ class MetaPanel extends ComponentType<IProps> {
                             Top Posters
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
-                        posters 
+                        <List>
+                            {userPosts && this.displayTopPosters(userPosts)}
+                            {console.log('users post: ', userPosts)} 
+                        </List>
                     </Accordion.Content>
 
                     <Accordion.Title
@@ -83,4 +106,5 @@ class MetaPanel extends ComponentType<IProps> {
             </Segment>
         )};
 }
+
 export default MetaPanel;

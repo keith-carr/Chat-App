@@ -7,6 +7,8 @@ import Message from './message/Message';
 import styles from './Messages.module.scss';
 import firebase from '../../firebase'; 
 import {InputEvent} from '../../ComponentType';
+import { connect } from 'react-redux';
+import { setUserPosts } from '../../store/actions/index';
 
 interface IProps {
     key: any,
@@ -16,6 +18,7 @@ interface IProps {
     handleStar?: () => void,
     starChannel?: () => void,
     addUserStarsListener?: () => void,
+    setUserPosts?: any,
 }
 
 interface IState {
@@ -95,6 +98,7 @@ class Messages extends ComponentType<IProps> {
             messagesLoading: false
           });
           this.countUniqueUsers(loadedMessages);
+          this.countUserPosts(loadedMessages);
         });
       };
 
@@ -176,8 +180,23 @@ class Messages extends ComponentType<IProps> {
         this.setState({numUniqueUsers});
     }
 
-    countUsersPosts = (messages:Array<string>) => {
-        let userPosts = messages.reduce((acc:any, message:any):any => {
+    // countUsersPosts = (messages:Array<string>) => {
+    //     let userPosts = messages.reduce((acc:any, message:any):any => {
+    //         if(message.user.name in acc) {
+    //             acc[message.user.name].count += 1;
+    //         } else {
+    //             acc[message.user.name] = {
+    //                 avatar: message.user.avatar,
+    //                 count: 1
+    //             }
+    //         }
+    //         return acc;
+    //     }, {});
+       
+    // }
+
+    countUserPosts = (messages: Array<any>) => {
+        let userPosts = messages.reduce((acc, message) => {
             if(message.user.name in acc) {
                 acc[message.user.name].count += 1;
             } else {
@@ -188,7 +207,8 @@ class Messages extends ComponentType<IProps> {
             }
             return acc;
         }, {});
-        console.log(userPosts);
+        console.log('userPosts -> Messages: ', userPosts);
+        this.props.setUserPosts(userPosts);
     }
 
     displayMessages = (messages:Array<any>) => (
@@ -244,4 +264,4 @@ class Messages extends ComponentType<IProps> {
         )
     }
 }
-export default Messages;
+export default connect<any, any>(null, {setUserPosts})(Messages);

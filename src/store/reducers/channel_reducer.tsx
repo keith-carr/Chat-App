@@ -4,6 +4,7 @@ import {IChannel} from '../actions/setCurrentChannel'
 
 const initialChannelState = {
   currentChannel: '',
+  userPosts: null,
 };
 
 const channel_reducer = (state = initialChannelState, action:any) => {

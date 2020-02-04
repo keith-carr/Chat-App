@@ -5,7 +5,7 @@ import UserPanel from './userpanel/UserPanel';
 import Channels from './channels/Channels';
 import DirectMessages from './directmessages/DirectMessages';
 import Starred from './starred/Starred';
-
+import classes from './SidePanel.module.scss';
 
 class SidePanel extends ComponentType {
     render() {
@@ -13,11 +13,11 @@ class SidePanel extends ComponentType {
 
         return (
             <Menu
+                id={classes.slidePanelContainer}
                 size="large"
                 inverted
                 fixed="left"
                 vertical
-                style={{background: "#4c3c4c", fontSize: "1.2rem"}}
             >   
                 <UserPanel currentUser={currentUser} />
                 <Starred currentUser={currentUser} />

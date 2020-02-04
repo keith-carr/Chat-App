@@ -115,7 +115,7 @@ class DirectMessages extends ComponentType<IProps> {
                         key={user.uid}
                         active={user.uid === activeChannel}
                         onClick={() => this.changeChannel(user)}
-                        style={{opacity: 0.7, fontStyle: 'italic'}}
+                        style={{opacity: 0.95, fontStyle: 'italic'}}
                     >
                         <Icon 
                             name="circle"

@@ -18,6 +18,11 @@ const user_reducer = (state = initialUserState, action:any) => {
         ...initialUserState,
         isLoading: false
       };
+      case actionTypes.SET_USER_POSTS:
+      return {
+        ...state,
+        userPosts: action.payload.userPosts
+      };
     default:
       return state;
   }

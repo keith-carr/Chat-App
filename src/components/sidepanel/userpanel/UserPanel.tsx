@@ -56,7 +56,7 @@ class UserPanel extends React.Component<Props> {
     console.log(this.props.currentUser);
     const { user } = this.state;
     return (
-      <Grid style={{ background: "#4c3c4c" }}>
+      <Grid>
         <Grid.Column>
           <Grid.Column>
             <Grid.Row style={{ padding: "1.2em", margin: 0 }}>

@@ -167,7 +167,7 @@ class Channels extends React.Component<IProps> {
                 key={channel.id+channel.name}
                 onClick={() => this.changeChannel(channel)}
                 name={channel.name}
-                style={{opacity:0.7}}
+                style={{opacity:0.95}}
                 active={channel.id === this.state.activeChannel}
             >
               {this.getNotificationCount(channel) && 
