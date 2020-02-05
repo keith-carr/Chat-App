@@ -10,8 +10,8 @@ import {
 } from "semantic-ui-react";
 import ComponentType from "../../../ComponentType";
 import { Link } from "react-router-dom";
-import styles from "./Register.module.scss";
-import firebase from "../../../firebase"; 
+import classes from "./Register.module.scss";
+import firebase from "../../../firebase";
 import md5 from "md5";
 
 type FormEvent = React.FormEvent<HTMLFormElement>;
@@ -22,13 +22,13 @@ interface IErrorMessage {
 }
 
 interface IForm {
-  username:string;
-  email:string;
-  password:string;
-  passwordConfirmation:string;
-  errors:Array<IErrorMessage>; // IErrorMessage is casted, not required when casted
-  loading:boolean,
-  usersRef:any,
+  username: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+  errors: Array<IErrorMessage>; // IErrorMessage is casted, not required when casted
+  loading: boolean;
+  usersRef: any;
   // value:string
 }
 
@@ -41,7 +41,7 @@ export class Register extends ComponentType {
     passwordConfirmation: "",
     errors: [],
     loading: false,
-    usersRef: firebase.database().ref('users'),
+    usersRef: firebase.database().ref("users")
     // value: ''
   };
   displayErrors = (errors: Array<IErrorMessage>) =>
@@ -52,14 +52,14 @@ export class Register extends ComponentType {
   handleChange = (event: InputEvent) => {
     this.setState({ [event.currentTarget.name]: event.currentTarget.value });
   };
-  handleSubmit:FormEventHandler = (event) => {
+  handleSubmit: FormEventHandler = event => {
     event.preventDefault();
     if (this.isFormValid()) {
       this.setState({ errors: [], loading: true });
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then((createdUser:any) => {
+        .then((createdUser: any) => {
           console.log(createdUser);
           createdUser.user
             .updateProfile({
@@ -70,8 +70,8 @@ export class Register extends ComponentType {
             })
             .then(() => {
               this.saveUser(createdUser).then(() => {
-                console.log('user saved');
-              })
+                console.log("user saved");
+              });
             })
             .catch((err: Error) => {
               console.error(err);
@@ -91,12 +91,12 @@ export class Register extends ComponentType {
     }
   };
 
-  saveUser = (createdUser:any) => {
-    return  this.state.usersRef.child(createdUser.user.uid).set({
+  saveUser = (createdUser: any) => {
+    return this.state.usersRef.child(createdUser.user.uid).set({
       name: createdUser.user.displayName,
-      avatar: createdUser.user.photoURL    
-    })
-  }
+      avatar: createdUser.user.photoURL
+    });
+  };
 
   handleInputError = (errors: Array<IErrorMessage>, inputName: string) =>
     errors.some(error => error.message.toLowerCase().includes(inputName))
@@ -126,7 +126,7 @@ export class Register extends ComponentType {
       !form.password.length ||
       !form.passwordConfirmation.length
     );
-  }; 
+  };
 
   isPasswordValid = (form: IForm) => {
     let { password, passwordConfirmation } = form;
@@ -151,79 +151,71 @@ export class Register extends ComponentType {
       <Grid
         textAlign="center"
         verticalAlign="middle"
-        className={styles.register}
+        className={classes.register}
         data-test="register-component"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h1" icon color="orange" textAlign="center">
-            <Icon name="puzzle piece" color="orange" />
-            Register For DevChat
+            <span className={classes.loginHeader}>Register With Us</span>
           </Header>
-          <Form data-test="form-component" size="large" onSubmit={this.handleSubmit}>
-            <Segment stacked>
-              <Form.Input
-                fluid
-                data-test="username-input"
-                name="username"
-                icon="user"
-                iconPosition="left"
-                placeholder="Username"
-                value={username}
-                onChange={this.handleChange}
-                type="text"
-              />
-              <Form.Input
-                fluid
-                name="email"
-                icon="mail"
-                iconPosition="left"
-                placeholder="Email Address"
-                value={email}
-                className={this.handleInputError(errors, "email")}
-                onChange={this.handleChange}
-                type="email"
-              />
+          <form
+            data-test="form-component"
+            onSubmit={this.handleSubmit}
+            className={classes.formContainer}
+          >
+            <div>
+              <p>DevChat</p>
+            </div>
 
-              <Form.Input
-                fluid
-                name="password"
-                icon="repeat"
-                iconPosition="left"
-                placeholder="Password"
-                value={password}
-                className={this.handleInputError(errors, "password")}
-                onChange={this.handleChange}
-                type="password"
-              />
+            <input
+              data-test="username-input"
+              name="username"
+              placeholder="Username"
+              value={username}
+              onChange={this.handleChange}
+              type="text"
+            />
+            <input
+              name="email"
+              placeholder="Email Address"
+              value={email}
+              className={this.handleInputError(errors, "email")}
+              onChange={this.handleChange}
+              type="email"
+            />
 
-              <Form.Input
-                fluid
-                name="passwordConfirmation"
-                icon="repeat"
-                iconPosition="left"
-                placeholder="Password Confirmation"
-                value={passwordConfirmation}
-                className={this.handleInputError(errors, "password")}
-                onChange={this.handleChange}
-                type="password"
-              />
+            <input
+              name="password"
+              placeholder="Password"
+              value={password}
+              className={this.handleInputError(errors, "password")}
+              onChange={this.handleChange}
+              type="password"
+            />
 
-              <Button
-                data-test="component-submit-btn"
-                disabled={loading}
-                className={loading ? "loading" : " "}
-                color="orange"
-                fluid
-                size="large"
-              >
-                Submit
-              </Button>
-            </Segment>
-            <Message>
+            <input
+              name="passwordConfirmation"
+              placeholder="Password Confirmation"
+              value={passwordConfirmation}
+              className={this.handleInputError(errors, "password")}
+              onChange={this.handleChange}
+              type="password"
+            />
+
+            <Button
+              data-test="component-submit-btn"
+              disabled={loading}
+              className={loading ? "loading" : " "}
+              color="orange"
+              size="large"
+            >
+              Submit
+            </Button>
+            <div className="uiMessage">
               Already a user?
-              <Link to="/login">{" "}Login</Link>
-            </Message>
-          </Form>
+              <Link to="/login"> Login</Link>
+            </div>
+          </form>
           {errors.length > 0 && (
             <Message error>
               <h3>Error</h3>

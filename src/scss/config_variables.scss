@@ -11,7 +11,9 @@ $navyBlue: lighten(#243b55, 4);
 $darkNavyBlue: #141e3a;
 $green: #2ecc71;
 $sunsetYellow: rgba(255, 195, 0, 0.94);
-
+$charcoal: #5f5f5f;
+$darkCharcoal: darken($charcoal, 7);
+$lightCharcoal: #858585;
 $royalToNavy: linear-gradient(to right, $darkNavyBlue 25%, $navyBlue 95%);
 $purple-pink: linear-gradient(to left, $pink 25%, $fadedpurple 95%);
 $violetFog: linear-gradient(to right, rgb(185, 147, 214), rgb(140, 166, 219) );

@@ -41,7 +41,7 @@ interface Props {
 const App: React.FC = ({currentUser, currentChannel, isPrivateChannel, userPosts}:any) => {
   
   return (
-    <Grid columns="equal" className="app" style={{background: '#eee'}}>
+    <Grid columns="equal">
       <ColorPanel
         key={currentUser && currentUser.name}
         currentUser={currentUser} />

@@ -10,8 +10,8 @@ import {
 } from "semantic-ui-react";
 import ComponentType from "../../../ComponentType";
 import { Link } from "react-router-dom";
-import styles from "./Login.module.scss";
 import firebase from 'firebase';
+import classes from "./Login.module.scss";
 
 type FormEvent = React.FormEvent<HTMLFormElement>;
 type InputEvent = React.FormEvent<HTMLInputElement>;
@@ -76,21 +76,21 @@ class Login extends ComponentType {
       <Grid
         textAlign="center"
         verticalAlign="middle"
-        className={styles.register}
+        className={classes.register}
         data-test="register-component"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h1" icon color="violet" textAlign="center">
-            <Icon name="code branch" color="violet" />
-            Login For DevChat
+            
+            <span className={classes.loginHeader}>Login Back In</span>
           </Header>
-          <Form onSubmit={this.handleSubmit}>
-            <Segment stacked>
-              <Form.Input
-                fluid
+          <form className={classes.formContainer} onSubmit={this.handleSubmit}>
+              <div> 
+                <p>DevChat</p>
+              </div>
+
+              <input
                 name="email"
-                icon="mail"
-                iconPosition="left"
                 placeholder="Email Address"
                 value={email}
                 className={this.handleInputError(errors, "email")}
@@ -98,11 +98,8 @@ class Login extends ComponentType {
                 type="email"
               />
 
-              <Form.Input
-                fluid
+              <input
                 name="password"
-                icon="repeat"
-                iconPosition="left"
                 placeholder="Password"
                 value={password}
                 className={this.handleInputError(errors, "password")}
@@ -119,13 +116,11 @@ class Login extends ComponentType {
               >
                 Submit
               </Button>
-            </Segment>
-
-            <Message>
-              Don't have an account?
-              <Link to="/register">Register</Link>
-            </Message>
-          </Form>
+            <div className='uiMessage'>
+              Don't have an account? {' '}
+              <Link to="/register"> Register</Link>
+            </div>
+          </form>
           {errors.length > 0 && (
             <Message error>
               <h3>Error</h3>
