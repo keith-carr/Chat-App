@@ -15,6 +15,23 @@ class ColorPanel extends ComponentType<IProps> {
     secondary: '',
     user: this.props.currentUser,
     usersRef: firebase.database().ref('users'),
+    userColors: []
+  }
+
+  componentDidMount() {
+    if(this.state.user) {
+      this.addListener(this.state.user.uid);
+    }
+  }
+
+  addListener = (userId: number) => {
+    let userColors: Array<string> = [];
+    this.state.usersRef
+      .child(`${userId}/colors`)
+      .on('child_added', snap => {
+        userColors.unshift(snap.val());
+        this.setState({userColors});
+      });
   }
 
   handleChangePrimary = (color: any) => this.setState({primary: color.hex});
@@ -36,17 +53,30 @@ class ColorPanel extends ComponentType<IProps> {
       })
       .then(() => {
         console.log('Colors added');
-        // this.closeModal();
+        this.closeModal(); 
       })
-      .catch( (err) => console.log(err));
+      .catch( (err) => console.error(err));
   } 
+
+  displayUserColors = (colors: any) => (
+    colors.length > 0 && colors.map((color:any, i: number) => (
+      <React.Fragment key={i}>
+        <Divider />
+        <div className="color__container">
+          <div className="color__square" style={{background: color.primary}}>
+            <div className="color__overlay" style={{background: color.secondary}}></div>
+          </div>
+        </div>
+      </React.Fragment>
+    ))
+  )
 
   openModal = () => this.setState({modal: true});
 
   closeModal = () => this.setState({modal: false});
 
     render() {
-        let {modal, primary, secondary} = this.state;
+        let {modal, primary, secondary, userColors} = this.state;
 
         return (
             <Sidebar
@@ -60,15 +90,16 @@ class ColorPanel extends ComponentType<IProps> {
               <Divider />
             
               <Button icon='add' size='small' style={{backgroundColor: '#00ada5'}} onClick={this.openModal} />
-              <Modal basic open={this.state.modal} onClose={this.closeModal}>
+              {this.displayUserColors(userColors)}
+              <Modal basic open={modal} onClose={this.closeModal}>
                 <Modal.Header>
                   <Modal.Content>
                     
-                      <Segment inverted onClick={this.handleSaveColors}>
+                      <Segment inverted  >
                         <Label content= 'Primary Color' />
                         <SliderPicker color={primary} onChange={this.handleChangePrimary} />
                       </Segment>
-                      <Segment inverted onClick={this.handleSaveColors}>
+                      <Segment inverted  >
                         <Label content='Secondary Color' />
                         <SliderPicker color={secondary} onChange={this.handleChangeSecondary} />
                       </Segment>
@@ -76,8 +107,8 @@ class ColorPanel extends ComponentType<IProps> {
                   </Modal.Content>
                   
                   <Modal.Actions>
-                    <Button color='green' inverted>
-                       <Icon name='checkmark' /> Apply Colors
+                    <Button color='green' inverted  onClick={this.handleSaveColors}>
+                       <Icon name='checkmark' /> Save Colors
                     </Button>
                     <Button color='red' onClick={this.closeModal} inverted>
                        <Icon name='remove'  /> Cancel
