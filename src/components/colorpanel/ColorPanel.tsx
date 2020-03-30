@@ -3,9 +3,18 @@ import { Label, Sidebar, Menu, Divider, Button, Modal, Icon, Segment } from 'sem
 import { SliderPicker } from 'react-color';
 import firebase from 'firebase';
 import ComponentType from '../../ComponentType';
+import classes from './ColorPanel.module.scss';
+import {connect} from 'react-redux';
+import {setColors} from '../../store/actions/index';
+
+export interface IColors {
+  primary: string,
+  secondary: string
+}
 
 interface IProps {
   currentUser: any,
+  setColors: (primary:IColors, secondary:IColors) => any
 }
 
 class ColorPanel extends ComponentType<IProps> {
@@ -58,13 +67,17 @@ class ColorPanel extends ComponentType<IProps> {
       .catch( (err) => console.error(err));
   } 
 
-  displayUserColors = (colors: any) => (
+  displayUserColors = (colors: IColors[]) => (
     colors.length > 0 && colors.map((color:any, i: number) => (
       <React.Fragment key={i}>
         <Divider />
-        <div className="color__container">
-          <div className="color__square" style={{background: color.primary}}>
-            <div className="color__overlay" style={{background: color.secondary}}></div>
+        <div 
+            className={classes.color__container} 
+            onClick={() => this.props.setColors(color.primary, color.secondary)}
+             
+        >
+          <div className={classes.color__square} style={{background: color.primary}}>
+            <div className={classes.color__overlay} style={{background: color.secondary}}></div>
           </div>
         </div>
       </React.Fragment>
@@ -120,4 +133,6 @@ class ColorPanel extends ComponentType<IProps> {
         )
     }
 }
-export default ColorPanel;
+
+
+export default connect(null,{setColors})(ColorPanel);

@@ -9,6 +9,7 @@ import firebase from '../../firebase';
 import {InputEvent} from '../../ComponentType';
 import { connect } from 'react-redux';
 import { setUserPosts } from '../../store/actions/index';
+import classes from './Messages.module.scss';
 
 interface IProps {
     key: any,
@@ -246,13 +247,14 @@ class Messages extends ComponentType<IProps> {
                 isChannelStarred={isChannelStarred}
             />
             
+            {/* <div className={classes.messages__segmentWrapper}> */}
             <Segment> 
                 <Comment.Group style={{maxWidth:'98%'}} className={styles.messages}>
                     {searchTerm ? this.displayMessages(searchResults) :
                      this.displayMessages(messages)}
                 </Comment.Group>
             </Segment>
-
+            {/* </div> */}
             <MessageForm
                 messagesRef={messagesRef}
                 currentChannel={channel}

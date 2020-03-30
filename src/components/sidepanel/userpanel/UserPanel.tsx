@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import firebase from "../../../firebase";
 // import styles from "./UserPanel.module.scss";
 import "./UserPanel.scss";
+import { IColors } from "../../colorpanel/ColorPanel";
 
 export interface Store extends React.Props<any> {
   store?: any;
@@ -13,7 +14,8 @@ interface Props {
   currentUser: {
     displayName: string;
     photoURL: string;
-  };
+  },
+  primaryColor: IColors
 }
 
 class UserPanel extends React.Component<Props> {
@@ -55,8 +57,9 @@ class UserPanel extends React.Component<Props> {
   render() {
     console.log(this.props.currentUser);
     const { user } = this.state;
+    const { primaryColor } = this.props;
     return (
-      <Grid>
+      <Grid style={{ background: primaryColor }}>
         <Grid.Column>
           <Grid.Column>
             <Grid.Row style={{ padding: "1.2em", margin: 0 }}>

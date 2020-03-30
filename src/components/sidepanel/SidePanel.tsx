@@ -9,7 +9,7 @@ import classes from './SidePanel.module.scss';
 
 class SidePanel extends ComponentType {
     render() {
-        const { currentUser } = this.props;
+        const { currentUser, primaryColor } = this.props;
 
         return (
             <Menu
@@ -18,8 +18,9 @@ class SidePanel extends ComponentType {
                 inverted
                 fixed="left"
                 vertical
+                style={{background: primaryColor, fontSize: '1.2rem'}}
             >   
-                <UserPanel currentUser={currentUser} />
+                <UserPanel primaryColor={primaryColor} currentUser={currentUser} />
                 <Starred currentUser={currentUser} />
                 <Channels currentUser={currentUser} />
                 <DirectMessages currentUser={currentUser} />

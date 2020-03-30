@@ -38,16 +38,19 @@ interface Props {
   currentUser:{displayName:string}
 }
 
-const App: React.FC = ({currentUser, currentChannel, isPrivateChannel, userPosts}:any) => {
+const App: React.FC = ({currentUser, currentChannel, isPrivateChannel,
+                        userPosts, primaryColor, secondaryColor}:any) => {
   
   return (
-    <Grid columns="equal"> 
+    <Grid columns="equal" style={{background: secondaryColor, height: '100vh', margin: '0' }}> 
       <ColorPanel
         key={currentUser && currentUser.name}
         currentUser={currentUser} />
       <SidePanel
         key={currentUser && currentUser.uid}
-        currentUser={currentUser} />
+        currentUser={currentUser}
+        primaryColor={primaryColor}
+        />
 
       <Grid.Column style={{marginLeft: 320}}>
         <Messages
@@ -74,6 +77,8 @@ const mapStateToProps = (state:any):any => ({
   currentChannel: state.channel.currentChannel,
   isPrivateChannel: state.channel.isPrivateChannel,
   userPosts: state.user.userPosts,
+  primaryColor: state.colors.primaryColor,
+  secondaryColor: state.colors.secondaryColor
 }); 
 
 export default connect(mapStateToProps)(App);
