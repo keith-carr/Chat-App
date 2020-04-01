@@ -45,9 +45,9 @@ class Root extends ComponentType {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.props.setUser(user);
-        this.props.history.push("/");
+        this.props.history.push("/Chat-App");
       } else {
-        this.props.history.push('/login');
+        this.props.history.push('/Chat-App/login');
         this.props.clearUser();
       }
     });
@@ -55,9 +55,9 @@ class Root extends ComponentType {
   render() {
     return this.props.isLoading ? <Spinner /> : (
       <Switch>
-        <Route exact path="/" component={App} />
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
+        <Route exact path="/Chat-App" component={App} />
+        <Route path="/Chat-App/login" component={Login} />
+        <Route path="/Chat-App/register" component={Register} />
       </Switch>
     );
   }
