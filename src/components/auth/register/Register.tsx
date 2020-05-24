@@ -19,7 +19,7 @@ type InputEvent = React.FormEvent<HTMLInputElement>;
 
 interface IErrorMessage {
   message: string;
-}
+} 
 
 interface IForm {
   username: string;
