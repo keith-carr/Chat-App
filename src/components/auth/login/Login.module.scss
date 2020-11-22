@@ -1,0 +1,60 @@
+@import '../../../scss/index.scss';
+
+html, 
+body, 
+.register {
+    height: 100vh;
+    // padding: 1em;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 500px;
+    height: 400px;
+    background-color: white;
+    padding: 8%;
+    border-radius: 5px;
+    box-shadow: 0 5px 12px rgba(140, 142, 240, 0.5);
+    font-family: 'Work Sans';
+
+    span.loginHeader {
+        font-family: 'Montserrat';
+    }
+    p {
+        font: 28px 'Baloo';
+        text-align: left;
+        color: $caribbean;
+    }
+
+    input {
+    outline: none;
+    border: 0;
+    border-bottom: 2px solid hsla(0,0%,86.3%,.7);
+    width: 100%;
+    display: block;
+    font: 24px 'Work Sans';
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    color: lighten($lightCharcoal, 2);;
+    font-weight: 500;
+    background-color: initial;
+    }
+    input::placeholder {
+        color: lighten($lightCharcoal, 14);
+    }
+    button {
+        letter-spacing: 2px;
+        font: 15px 'Baloo';
+        width: 50% !important;
+        box-shadow: 0 5px 12px rgba(140, 142, 240, 0.5) !important;
+        transition: all 0.6s !important;
+        &:hover {
+            box-shadow: 0 6px 15px rgba(140, 142, 240, 0.8)!important;
+        }
+    }
+    div.uiMessage {
+        width: 50% !important;
+    }
+}

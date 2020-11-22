@@ -1,0 +1,54 @@
+// ========= MY CUSTOM SASS==========
+$pink: #d7706d;
+$fadedpurple: #9586a6;
+$royalPurple: #39007f;
+$caribbean: #00A2FF;
+$turquoise: #00BCD4;
+$orange: rgb(248, 54, 0);
+$kitkat: rgb(242,113,28);
+$brightOrange: #fe8c00;
+$navyBlue: lighten(#243b55, 4);
+$darkNavyBlue: #141e3a;
+$green: #2ecc71;
+$sunsetYellow: rgba(255, 195, 0, 0.94);
+$charcoal: #5f5f5f;
+$darkCharcoal: darken($charcoal, 7);
+$lightCharcoal: #858585;
+$royalToNavy: linear-gradient(to right, $darkNavyBlue 25%, $navyBlue 95%);
+$purple-pink: linear-gradient(to left, $pink 25%, $fadedpurple 95%);
+$violetFog: linear-gradient(to right, rgb(185, 147, 214), rgb(140, 166, 219) );
+$caribbeanFade: linear-gradient(to right, rgb(0, 198, 255), rgb(0, 114, 255));
+$orange-pink: #ff6f52;
+
+$slatePurple: #786B9C;
+$slackPurple: #35063E;
+$soundCloud: linear-gradient(to right, #ff9900 40%, rgb(248, 54, 0));
+$soundCloudTrans: linear-gradient(to right, rgba(255, 195, 0, .94) 40%, rgba(248, 54, 0, 0.9));
+
+$slateBlue: #d6dbe9;
+$lightSlateBlue: lighten(#d6dbe9, 3);
+$lightGrayPurple: #ded6e7;
+$darkGray: #707070;
+$gray: #919191;
+$lightGray: #d9d9d9;
+$lightGrayBlue: #a2b3be;
+
+//=====BOX SHADOW=====
+$boxShadow1: 0 4px 5px 0 rgba(0, 0, 0, 0.26);
+$boxHover1: 0px 3px 5 rgba(0, 0, 0, 0.4);
+
+//=====Media Queries======
+$breakPoint:(
+'extraLarge': 992px,
+'large': 820px,
+'medium': 607px,
+'small': 576px,
+'extraSmall': 575px,
+);
+// $breakPoint:(
+// 'extraLarge': 1200px,
+// 'large': 992px,
+// 'medium': 768px,
+// 'small': 576px,
+// 'extraSmall': 575px,
+// );
