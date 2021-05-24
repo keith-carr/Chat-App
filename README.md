@@ -1,5 +1,6 @@
 
-## Chat room application - https://kcee403.github.io/Chat-App/
+## Chat room application
+  https://kcee403.github.io/Chat-App/
   1. Separate channels
   2. Private Messages
   3. Authorization, with Login and Register (Registering is not needed to Demo app)
