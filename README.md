@@ -8,4 +8,4 @@
   5. Starred Channels
   6. Customizalbe color Scheme
 
- **Tech Stack - Typescript, Reactjs, Firebase, Jest & Enzyme**
+ **Tech - Typescript, Reactjs, Firebase, Jest & Enzyme**
