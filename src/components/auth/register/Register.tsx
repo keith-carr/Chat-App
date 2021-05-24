@@ -209,7 +209,7 @@ export class Register extends ComponentType {
               color="orange"
               size="large"
             >
-              Submit
+              Enter
             </Button>
             <div className="uiMessage">
               Already a user?

@@ -30,8 +30,8 @@ interface IForm {
 class Login extends ComponentType {
   // const Register = () => {
   state: IForm = {
-    email: "",
-    password: "",
+    email: "spiderman@gmail.com",
+    password: "123456",
     errors: [],
     loading: false
   };
@@ -104,7 +104,7 @@ class Login extends ComponentType {
                 value={password}
                 className={this.handleInputError(errors, "password")}
                 onChange={this.handleChange}
-                type="password"
+                type="text"
               />
 
               <Button
@@ -114,7 +114,7 @@ class Login extends ComponentType {
                 fluid
                 size="large"
               >
-                Submit
+                Enter Chat
               </Button>
             <div className='uiMessage'>
               Don't have an account? {' '}
