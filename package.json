@@ -26,7 +26,7 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "md5": "^2.2.1",
     "mime-types": "^2.1.26",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moxios": "^0.4.0",
     "react": "^16.12.0",
     "react-color": "^2.18.0",
