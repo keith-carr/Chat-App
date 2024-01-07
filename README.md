@@ -9,5 +9,3 @@
   6. Customizalbe color Scheme
 
  **Tech - Typescript, Reactjs, Firebase, Jest & Enzyme**
-
-# @kayceecodes
